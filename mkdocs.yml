@@ -1,8 +1,5 @@
-site_name: ReCoDE Exemplar Template
-repo_url: https://github.com/ImperialCollegeLondon/ReCoDE-exemplar-template
-
-## Please change the above name and link to point to your exemplar
-## Please do not change the theme or most other options below 
+site_name: ReCoDE Lattice Hamiltonian
+repo_url: https://github.com/ImperialCollegeLondon/ReCoDE-Lattice-Hamiltonian
 
 edit_uri: tree/main/docs/
 
