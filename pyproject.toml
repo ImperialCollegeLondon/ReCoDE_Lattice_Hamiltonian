@@ -60,6 +60,3 @@ lint.pydocstyle.convention = "google"
 # Some of the docs scripts give errors, but we don't care
 exclude = "docs"
 ignore_missing_imports = true
-# Allows Type[T] to refer to abstract classes, which is not otherwise supported.
-# See https://github.com/python/mypy/issues/4717
-disable_error_code = "type-abstract"
