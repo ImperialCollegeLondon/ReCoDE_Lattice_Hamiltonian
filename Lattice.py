@@ -20,11 +20,11 @@ from itertools import product
 
 #electronic parameters
 class Parameters:
-    def __init__(self, Temp, kout, j0, r0j, E_singlet, 
+    def __init__(self, Temp, j0, r0j, E_singlet, 
                Epeak, 
                reorE_outer, reorE_inner,
                recom = 0):
-        self.Temp, self.kout, self.Epeak = Temp, kout, Epeak
+        self.Temp, self.Epeak = Temp, Epeak
         self.reorE_outer, self.reorE_inner = reorE_outer, reorE_inner
         self.kT = sp.k/sp.e*self.Temp
         self.j0, self.r0j = j0, r0j
@@ -160,7 +160,6 @@ class lattice:
             np.random.seed(seed = random_seed)
         #Create empty lists to store the values of various quantities of interest 
         Transdip_vec_Ex, krec_vec_Ex, Transdip_vec_CT, krec_vec_CT, dist_he = [],[],[],[],[]
-        extraction_rate_vec = []
         E_singlet = params.E_singlet
         Is_Ex, Is_CT = [],[]        
         counter = 0
@@ -195,15 +194,10 @@ class lattice:
                     #to the ground is negligible. 
                     elif recom == 1:
                         krec_vec_CT.append(Elec_pos.V_CT)
-
                 else:
                     Transdip_vec_CT.append(0)
                     krec_vec_CT.append(0)
-                #Adding in an extraction rate for CS states  
-                if distance_ele_hole >= dist_CS_min:
-                    extraction_rate_vec.append(1)
-                else: 
-                    extraction_rate_vec.append(0)
+                    
                 #Calculate the values of the diagonal terms which go into the matrix
                 #Which diagonal term you are calculating is kept track of my row and col
                 #Also build up all the possible combinations of electrons and holes which make up the basis 
@@ -265,8 +259,7 @@ class lattice:
         self.Transdip_vec_CT = Transdip_vec_CT
         self.Transdip_vec_Ex = Transdip_vec_Ex
         self.krec_vec_Ex = krec_vec_Ex
-        self.krec_vec_CT = krec_vec_CT
-        self.extraction_rate_vec = extraction_rate_vec           
+        self.krec_vec_CT = krec_vec_CT         
         self.dist_he = dist_he
         self.Is_Ex = Is_Ex
         self.Is_CT = Is_CT
@@ -286,7 +279,6 @@ class lattice:
         list_evecs, dis_st, IPR, Ex_char, Transdip_Ex, Transdip_CT, occupation_prob, Krec_Ex, Krec_CT = [],[],[],[],[],[],[],[],[]
         Is_Ex = np.array(self.Is_Ex)
         basis = np.array(self.basis)
-        extraction_rate = []
         if params.recom == 1:
             V_eff_ex, V_eff_CT = [],[]
         for i in range(len(evals)):
@@ -327,11 +319,10 @@ class lattice:
                 Effective_outer_reorE_CT = reorE_outer*(1/IPR[i][1] + 1/IPR[i][2])
                 Krec_CT.append(Recombination.decay_rate(Effective_inner_reorE_CT, params.Epeak, Effective_outer_reorE_CT, 
                                                          evals[i], Effective_coupling_CT))                                
-            extraction_rate.append(occupation_probability @ self.extraction_rate_vec)
         states = pd.DataFrame({'En_eV': evals,'dis_eh': dis_st, 
                                 'IPR': IPR, 'Ex_char': Ex_char,
                                 'Transdip_Ex': Transdip_Ex,'Transdip_CT': Transdip_CT,
-                                'Krec_Ex': Krec_Ex,'Krec_CT': Krec_CT,'extraction_rate_prob': extraction_rate,
+                                'Krec_Ex': Krec_Ex,'Krec_CT': Krec_CT,
                                 'occupation_probability': occupation_prob})          
         #make it so the states are numbered 1 to n, not 0 to n-1
         states = states.sort_values(by=['En_eV'])
@@ -377,9 +368,6 @@ class lattice:
         #Transpose means a[i,j] is now the transition from state i to state j
         a = np.transpose(a)
         self.states['Gen'] = self.states.Transdip_Ex + self.states.Transdip_CT
-        #extraction_rate_prob = occupation_probability @ self.extraction_rate_vec
-        #Need this to get the extraction rate probability for the eigenstates, not basis states (I think)
-        self.states['kout'] = self.states.extraction_rate_prob*params.kout
         
         for i in range(len(self.states)):
             #The sum of a column of the rate matrix gives the total rate of transitions out of the state i (as he's transposed it)
@@ -389,7 +377,7 @@ class lattice:
             #These diagonal terms will be multiplied by the population of the state i when you do the rate eqn matrix multiplication
             #The other terms in the row will be multiplied by the populations of the other states, which is what you want as this calculates the 
             #rate of transitions from those states into state i
-            a[i,i] = a[i,i] - self.states.iloc[i].kout - self.states.iloc[i].Krec_Ex - self.states.iloc[i].Krec_CT
+            a[i,i] = a[i,i] - self.states.iloc[i].Krec_Ex - self.states.iloc[i].Krec_CT
             Isteady_n[i] = self.states.iloc[i].Gen
             
         #print(np.linalg.cond(a))
@@ -402,21 +390,7 @@ class lattice:
         #I changed back as this one at least gives me warnings that the answers might be wrong...
         #z, res, r, s = linalg.lstsq(a, b)
         z = linalg.solve(a,b)
-        
-        #Sum up the total extraction, generation and recombination from each state to get a total value for a given set of parameters
-        recombination_rate_EX, recombination_rate_CT = 0,0
-        charge_extraction = 0
-        for i in range(len(self.states)-1): 
-            charge_extraction = z[i]*self.states.iloc[i].kout + charge_extraction
-            recombination_rate_EX = z[i]*self.states.iloc[i].Krec_Ex + recombination_rate_EX
-            recombination_rate_CT = z[i]*self.states.iloc[i].Krec_CT + recombination_rate_CT     
-        #Turn these numbers into efficiencies by dividing by the total generation term i.e., sum(b)
-        #Minus sign here as b multiplied by -1 earlier to get it into the right form for linalg.solve
         self.states['z'] = z
-        self.charge_gen = -charge_extraction/sum(b)
-        self.recombination_Ex = -recombination_rate_EX/sum(b)
-        self.recombination_CT = -recombination_rate_CT/sum(b)
-        return -charge_extraction/sum(b), -recombination_rate_EX/sum(b), -recombination_rate_CT/sum(b)
     
 #Code needs optimising 
 def calc_IPR(eigvec, basis, Is_Ex):
