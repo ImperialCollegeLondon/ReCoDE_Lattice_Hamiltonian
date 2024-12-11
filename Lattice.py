@@ -17,77 +17,71 @@ from scipy import linalg
 from copy import deepcopy
 from itertools import combinations
 from itertools import product
+from dataclasses import dataclass
 
-#electronic parameters
+@dataclass
 class Parameters:
-    def __init__(self, Temp, j0, r0j, E_singlet, 
-               Epeak, 
-               reorE_outer, reorE_inner,
-               recom = 0):
-        self.Temp, self.Epeak = Temp, Epeak
-        self.reorE_outer, self.reorE_inner = reorE_outer, reorE_inner
-        self.kT = sp.k/sp.e*self.Temp
-        self.j0, self.r0j = j0, r0j
-        self.E_singlet = E_singlet
-        self.recom = recom    
-    def to_dict(self):
-        return{
-         'Temperature K': self.Temp,
-         'Kout s-1ljm ':self.kout,
-         'J0_eV':self.j0,
-         'R0J_A':self.r0j,
-         'E_singlet':self.E_singlet,
-         'Epeak':self.Epeak,
-         'reorE_inner':self.reorE_inner,
-         'reorE_outer':self.reorE_outer         
-         }
+    """Stores global parameters of the system"""
+    
+    Temp: float
+    """The temperature of the lattice in Kelvin."""
+    Epeak: float
+    """The energy of the peak of the spectral density function in eV. Typically 0.16 eV for organic molecules."""
+    reorE_outer: float
+    """The outer reorganisation energy of each molecule in the lattice in eV."""
+    reorE_inner:float
+    """The inner reorganisation energy of each molecule in the lattice in eV."""
+    j0: float
+    """A parameter used in determining the shape of the Mataga potenial. Units are eV."""
+    r0j: float
+    """A parameter used in determining the shape of the Mataga potenial. Units are angstrom."""
+    E_singlet: float
+    """The energy of a singlet exciton in eV. This should be lower than the bandgap of the material."""
+    recom: int = 0
+    """A switch which determines whether recombination rates are treated as a constant (0) or are calculated using generalised Marcus-Levich-Jortner (1)."""
 
+    @property 
+    def kT(self):
+        return sp.k/sp.e * self.Temp
+
+@dataclass
 class site:
-    def __init__(self, coordinate, HOMO, LUMO, ID, transition_dipole_Ex, transition_dipole_CT, 
-                 recom = 0, Krec_CT = 0, Krec_Ex = 0, V_CT = 0, V_ex = 0):
-        self.coordinate = coordinate #XYZ coordiante in space in A
-        self.HOMO = HOMO
-        self.LUMO = LUMO
-        self.Nearest_Neighbour = []
-        self.LUMO_coupling = [] 
-        self.HOMO_coupling = []
-        self.Dipole_coupling = []
-        self.transition_dipole_Ex = transition_dipole_Ex
-        self.transition_dipole_CT = transition_dipole_CT
-        if recom == 0:
-            self.Krec_Ex = Krec_Ex            
+    """Stores the properties of each lattice site"""
+    
+    coordinate: list[float]
+    """A list of the (x,y,z) coordinates of the lattice site. Units are angstrom. """
+    HOMO: float
+    """Energy of the lattice site's highest occupied molecular orbital in eV."""
+    LUMO: float
+    """Energy of the lattice site's lowest unoccupied molecular orbital in eV."""
+    Nearest_Neighbour = list[float]
+    """List containing the IDs of all the lattice sites to include when calculating the size of the dipole-dipole coupling."""
+    LUMO_coupling = list[float]
+    """List containing the electronic coupling between the LUMO of the lattice site and the LUMOs of all its adjacent neighbours."""
+    HOMO_coupling = list[float]
+    """List containing the electronic coupling between the HOMO of the lattice site and the HOMOs of all its adjacent neighbours."""
+    Dipole_coupling = list[float]
+    """List containing the dipole coupling between the current lattice site and all the lattice sites included in the list Nearest_Neighbour."""
+    transition_dipole_Ex: float
+    """Number between zero and one which controls the rate at which excitons are generated in the lattice."""
+    transition_dipole_CT: float = 0
+    """Number between zero and one which controls the rate at which nearest neighbour charge transfer states are generated in the lattice."""
+    id: int
+    """The ID of the lattice site."""
+    recom: int
+    """A switch which determines whether recombination rates are treated as a constant (0) or are calculated using generalised Marcus-Levich-Jortner (1)."""
+
+    def __post_init__(self):
+        if self.recom == 0:
+            self.Krec_Ex = Krec_Ex 
+            """The decay rate of excitonic states in s-1."""
             self.Krec_CT = Krec_CT
-        elif recom == 1:
+            """The decay rate of nearest neighbour charge transfer states in s-1."""
+        elif self.recom == 1:
             self.V_CT = V_CT
+            """The strength of the coupling between the ground state and the nearest neighbour charge transfer state in eV."""
             self.V_ex = V_ex
-        self.id = ID
-        self.recom = recom
-            
-    def to_dict(self, nonuniform = 0):
-        recom = self.recom
-        if recom == 0:
-            value_ex = self.Krec_Ex
-            value_CT = self.Krec_CT
-        elif recom == 1:
-            value_ex = self.V_ex
-            value_CT = self.V_CT
-        labels_ex = ['Krec_Ex_s-1', 'V_Ex_eV']
-        labels_CT = ['Krec_CT_s-1', 'V_CT_eV']
-        return{
-            'coordinate': self.coordinate,
-            'HOMO':self.HOMO,
-            'LUMO':self.LUMO,
-            'Nearest_Neighbour':self.Nearest_Neighbour,
-            'LUMO_coupling':self.LUMO_coupling,
-            'HOMO_coupling':self.HOMO_coupling,
-            'Dipole_coupling':self.Dipole_coupling,
-            'recom_mech':self.recom,
-            labels_ex[recom]:value_ex,
-            labels_CT[recom]:value_CT,
-            'transition_dipole_Ex':self.transition_dipole_Ex,
-            'transition_dipole_CT':self.transition_dipole_CT,
-            'id':self.id,
-            }
+            """The strength of the coupling between the ground state and the exciton state in eV."""
 
 class lattice:
     def __init__(self):
