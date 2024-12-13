@@ -23,11 +23,15 @@ where $\vec{r}$ is the vector connecting the electron-hole pair, and the second 
 
 These energies form the diagonal elements of the Hamiltonian. To simulate the disorder commonly found in the site energies of organic crystals, the model includes a Gaussian disorder term, which is added to the diagonal elements of the Hamiltonian. 
 
-In the off diagonal elements, we consider interactions between the basis states. Each exciton is weakly coupled to other excitons in the lattice, and we model this using a dipole-dipole interaction which takes the functional form
+In the off diagonal elements, we consider interactions between the basis states. Each exciton is weakly coupled to other excitons in the lattice, and we model this using a dipole-dipole interaction which takes the functional form: $^{1}$
 
-$d(|\vec{r}|)=\frac{d_{0}}{(1+(|\vec{r}|-a)/r_{\mathrm{0,d}})^{3}}$ 
+$$ d(|\vec{r}|)=   
+\begin{cases}
+\frac{d_{0}}{(1+(|\vec{r}|-a)/r_{\mathrm{0,d}})^{3}}  &\text{ if } 0 \leq |\vec{r}| \leq r_{\mathrm{coupled}} \\
+0 &\text{ if } |\vec{r}| > r_{\mathrm{coupled}}
+\end{cases}  $$
 
-where $d_{0}$ and $r_{\mathrm{0,d}}$ are the two parameters which characterise the strength of the dipole-dipole interaction and $a$ is the spacing between lattice sites. We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
+where $d_{0}$ and $r_{\mathrm{0,d}}$ are the two parameters which characterise the strength of the dipole-dipole interaction, $a$ is the spacing between lattice sites and $r_{\mathrm{coupled}}$ is a parameter which controls the maximum separation which a pair of excitons can have for their couipling to be included in the Hamiltonian. Typically, we set this to $1.45a$ since the $|\vec{r}|^{-3}$ dependence of $d(|\vec{r}|)$ means that the coupling between exciton pairs is generally negligible for pairs which are further apart than diagonal neighbours
 
 In addition to this coupling between excitonic states, it is also possible for the electron (hole) to hop to a neighbouring lattice site, leaving the initial molecule with a positive (negative) charge and giving one of its neighbours a negative (positive) charge. The size of the coupling describing this interaction depends on the wavefunction overlap between the molecules involved, which typically decays exponentially with distance. Thus, we assume that this type of interaction can only take place between directly adjacent lattice sites and it is parameterised by the electronic coupling $t_{\mathrm{0,LUMO}}$ ($t_{\mathrm{0,HOMO}}$). 
 
@@ -38,3 +42,5 @@ Putting these parts together, we can write the Hamiltonian describing the electr
 ```
 
 where basis states indexed with k are excitonic in character, while those indexed using i and j describe electron-hole pairs. The i index refers to the lattice site on which the electron is located and the j index to that on which the hole is localised. We then diagonalise this Hamiltonian to find the eigenstates and energy levels of the system.
+
+$^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
