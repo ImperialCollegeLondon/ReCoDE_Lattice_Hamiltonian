@@ -6,7 +6,7 @@ Created on Fri Nov 29 16:26:14 2024
 """
 
 #%% Import things
-from Lattice import lattice
+from Lattice import Lattice
 from Lattice import Parameters
 from datetime import datetime
 import os
@@ -25,7 +25,7 @@ parameter_to_vary = 't0'
 parameter_array = [1e-3, 2e-3, 3e-3, 4e-3, 5e-3]
 labels = ['1 meV', '2 meV', '3 meV', '4 meV', '5 meV']
 
-L0_dict = {}
+lattice_dict = {}
 
 spacing = 10   # Angstrom
 num_sites_coupled =  1.45 #1.45, not one here as I want to count diagonal neighbours as CT states
@@ -39,49 +39,47 @@ save = 1
 for i in range(len(parameter_array)):
 #kout is the extraction rate of the separted charges
 #distance over which charges are considered 'separated' is determined by dist_CS_min parameter in L0.buildHam
-    params = Parameters(Temp = 300, 
-                    Epeak = 0.16,
-                    kout = 1e11,
-                    reorE_inner = 0.202, reorE_outer = 0.048,
+    params = Parameters(temp = 300, 
+                    e_peak = 0.16,
+                    lambda_inner = 0.202, lambda_outer = 0.048,
                     j0 = j0, r0j = r0j*spacing, 
-                    E_singlet = 1.4,
-                    recom = 1)
+                    e_singlet = 1.4,
+                    const_recombination = False)
 
 #Build the lattice
-    L0 = lattice()
-    L0.generate_uniform(size = size,
+    lattice = Lattice()
+    lattice.generate_uniform(size = size,
                         HOMO = 0, LUMO = 1.8,
-                        dist_sites_A = spacing, 
+                        dist_sites = spacing, 
                         min_dist_near_neighbour = num_sites_coupled*spacing + 0.01,
                         t0_homo = parameter_array[i], t0_lumo = parameter_array[i],
                         d0 = 5e-3, r0d = 0.1*spacing,
-                        V_ex = 0.02, V_CT = 0.001,
-                        CT_abs_prop = 0, recom = 1)
+                        v_ex = 0.02, v_ct = 0.001,
+                        ct_abs_prop = 0, const_recombination = False)
     
     time_start = datetime.now()
-    L0.buildHam(params,
+    lattice.build_ham(params,
                 F = [0,0,0],
                 min_dist_near_neighbour = (num_sites_coupled*spacing) + 0.01,
-                dist_CS_min = min_dist*spacing,
+                dist_cs_min = min_dist*spacing,
                 disorder_site_ene = 0.05,
                 random_seed = 42)
     time_ham = datetime.now()
     print('\n' + 'build ham: ' + str(time_ham - time_start))   
-    L0.states_from_Ham_v2(params, max_energy_diff = 1.5)
+    lattice.states_from_ham(params, max_energy_diff = 1.5)
     time_states = datetime.now()
     print('get states: ' + str(time_states - time_ham))
     #calculate the rates of transitions between states using Redfield 
-    L0.rates_mat_2D_v7(params) 
+    lattice.get_rate_mat(params) 
     time_rates = datetime.now()
     print('get rates: ' + str(time_rates - time_states))
     #solve for steady state population of the different states 
-    L0.solve_steady(params)
+    lattice.solve_steady(params)
     time_steady = datetime.now()
     print('solve steady: ' + str(time_steady - time_rates))
     print('total: ' + str(time_steady - time_ham)) 
-    print( "charge generation efficiency: {val:.2f}".format(val = L0.charge_gen) + "\nratio of recombination Ex: {val:.2f}".format(val = L0.recombination_Ex) + "\nratio of recombination CT: {val:.2f}".format(val = L0.recombination_CT))
-  
-    L0_dict[i] = L0
+
+    lattice_dict[i] = lattice
         
 #%%
 #Plot recombination rates
@@ -94,7 +92,8 @@ values = np.linspace(0, 1, len(parameter_array))
 colours = [cmap(i) for i in values]
 
 for i in range(len(parameter_array)):
-    ax.plot(L0_dict[i].states.dis_eh, L0_dict[i].states.En_eV, label = labels[i], color=colours[i], marker = 'x', ls = ' ', zorder = len(parameter_array)-i)
+    ax.plot(lattice_dict[i].states.dis_eh, lattice_dict[i].states.energies, 
+            label = labels[i], color=colours[i], marker = 'x', ls = ' ', zorder = len(parameter_array)-i)
     
 ax.set_xlabel('r$_{e-h}$ (Lattice Sites)', fontsize = 16)
 ax.set_ylabel('Energy (eV)', fontsize = 16)
