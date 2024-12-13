@@ -148,7 +148,7 @@ class Lattice:
     def sites_to_dataframe(self, nonuniform = 0):
         return pd.DataFrame.from_records([s.to_dict(nonuniform) for s in self.sites])
     
-    def build_ham(self, params, F, min_dist_near_neighbour, dist_cs_min, disorder_site_ene, random_seed = 0):
+    def build_ham(self, params, F:list[float], min_dist_near_neighbour: float, dist_cs_min: float, disorder_site_ene: float, random_seed:int = 0):
         row = []
         col = []
         data = []
@@ -250,7 +250,7 @@ class Lattice:
         self.is_ex = is_ex
 
     #Find the eigenvalues and eigenvectors of the Hamiltonian 
-    def states_from_ham(self, params, max_energy_diff):  
+    def states_from_ham(self, params, max_energy_diff:float):  
         lambda_inner, lambda_outer = params.lambda_inner, params.lambda_outer, 
         evals,evecs = linalg.eigh(self.ham.toarray())
         #evals,evecs = eigsh(self.Ham, k=(len(self.sites)**2)-1, which = 'SM')
@@ -354,7 +354,7 @@ class Lattice:
         self.states['z'] = z
     
 #Code needs optimising 
-def calc_IPR(eigvec, basis, is_ex):
+def calc_IPR(eigvec:list[float], basis:list[float], is_ex:list[float]):
         #These are calculated following method in D'Avino et al. J. Phys. Chem. Lett. 2016, 7, 536-540
         #Although I think there is a mistake in this paper - missing a squared sign???
         #See workbook 3, 14/11/23
