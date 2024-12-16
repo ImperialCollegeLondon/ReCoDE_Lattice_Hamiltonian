@@ -22,7 +22,7 @@ where the summation over $k$ evaulates the contribution to the eigenstate from e
 
 # Recombination Rates
 
-In our exemplar, the recombination of eigenstates to the ground state is assumed to be dominated by non-radiative recombination. These decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3):
+In our exemplar, the recombination of eigenstates to the ground state is assumed to be dominated by non-radiative recombination. The corresponding decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3):
 
 $k_{rec}^{\alpha} = \frac{2\pi}{\hbar} |V^{\alpha}|^2 FCWD^{\alpha}(\hbar\omega=0)$
 
@@ -30,13 +30,13 @@ where $FCWD$ refers to the Franck-Condon weighted density of states, which descr
 
 $FCWD(0)=\frac{1}{\sqrt{4\pi\lambda_{l}kT}} \sum_(w=0)^{\infty}\sum_{t=0}^{\infty}\frac{e^{-S}S^{w-t} t!}{w!}\left[L_{t}^{w-t}(S)\right]^2 e^\left(-[E+\lambda_{l}+(w-t)\hbar\Omega]^2/4 \lambda_{l}kT\right)\frac{e^{-t\hbar\Omega⁄kT}}{Z_{\hbar\Omega}}$
 
-for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the reorganisation energy associated with the spectral density function described in the file 01_ModelDescription by defining $\lambda_{\mathrm{total}} = \lambda_{l} + \lambda_{h}$ and $\hbar\Omega$ is given by the value of the e_peak parameter. 
+for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the reorganisation energy associated with the spectral density function described in the file 01_ModelDescription by defining $\lambda_{\mathrm{total}} = \lambda_{l} + \lambda_{h}$ and $\hbar\Omega$ is given by the value of the e_peak parameter. 
 
-The overlap of the wavefunctions associated with the vibronic modes is approximated with the generalized Laguerre polynomials of degree $t$, $L_{t}^{w-t}(S)$. The number of ground state and excited states phonon modes ($w$ and $t$, respectively) can generally be truncated depending on the temperature and energy of the effective mode. Phonon states are considered to be in thermal equilibrium and their occupation in the initial excited state is normalised with the canonical partition function
+The overlap of the wavefunctions associated with the vibronic modes is approximated using the generalized Laguerre polynomials of degree $t$, $L_{t}^{w-t}(S)$. The number of ground state and excited state phonon modes ($w$ and $t$, respectively) can generally be truncated depending on the temperature and energy of the effective mode. Phonon states are considered to be in thermal equilibrium and their occupation is normalised using the canonical partition function
 
 $Z_{\hbar\Omega}=\sum_{t=0}^{\infty}e^{-t\hbar\Omega⁄kT}$
 
-In the exemplar, we define separate couplings to the ground for excitonic and CT basis states:
+In the exemplar, we define separate couplings to the ground state for excitonic and CT basis states:
 
 $V_{\mathrm{ex}} = \sum_{kk}c_{kk}^{\alpha}V_{\mathrm{ex}}$
 
