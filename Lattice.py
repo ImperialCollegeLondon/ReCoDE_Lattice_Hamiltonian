@@ -318,7 +318,6 @@ class Lattice:
         else:
             #adding newly calculated values onto the pre-existing states dataframe 
             self.states = pd.concat([self.states, states], ignore_index=True)  
-        return np.asarray(list_evecs)
     
     def get_rate_mat(self, params):
         '''Redfield rates using a secular approximation as in Marcus and Renger 2002 & Quantum biology revisited 2020'''
@@ -354,7 +353,7 @@ class Lattice:
         self.states['z'] = z
     
 #Code needs optimising 
-def calc_IPR(eigvec:list[float], basis:list[float], is_ex:list[float]):
+def calc_IPR(eigvec:list[float], basis:list[float], is_ex:list[float]) -> list[float]:
         #These are calculated following method in D'Avino et al. J. Phys. Chem. Lett. 2016, 7, 536-540
         #Although I think there is a mistake in this paper - missing a squared sign???
         #See workbook 3, 14/11/23
