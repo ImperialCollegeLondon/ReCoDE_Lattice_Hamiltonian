@@ -6,17 +6,17 @@ Created on Fri Nov 29 16:19:11 2024
 """
 
 import numpy as np
-import numpy.typing as npt
+from numpy.typing import NDArray
 import scipy.constants as const
 import scipy.integrate as integrate
 
 #factor of h/e here as we input the reorganisation energies in eV and C(w) should have units of s-1
-def C_re_2D_array(w:npt.NDArray, lambda_total:float, e_peak:float, kT:float) -> npt.NDarray:
+def C_re_2D_array(w:NDArray[np.float32], lambda_total:float, e_peak:float, kT:float) -> NDArray[np.float32]:
     C_w = ((1+nw(w,kT))*((J_Renger(w,lambda_total,e_peak,kT = kT))\
         - (J_Renger(-w,lambda_total,e_peak,kT = kT))))/(const.hbar/const.e)   
     return 2*np.pi*C_w
 
-def nw(w:npt.NDArray, kT:float) -> npt.NDarray:                       
+def nw(w:NDArray[np.float32], kT:float) -> NDArray[np.float32]:                       
     '''Bose-Einstein occupancy function'''
     if hasattr(w, "__len__") == 0:
         if w == 0: n=np.inf
@@ -26,7 +26,7 @@ def nw(w:npt.NDArray, kT:float) -> npt.NDarray:
         n=1/(np.exp(w/kT)-1) 
     return n                                                 
 
-def J_Renger(w:npt.NDArray, lambda_total:float, e_peak:float, kT:float = 0.0257, n:int = 15) -> npt.NDarray:
+def J_Renger(w:NDArray[np.float32], lambda_total:float, e_peak:float, kT:float = 0.0257, n:int = 15) -> NDArray[np.float32]:
     a = e_peak/(3/n)**(1/n)
     J_w = lambda_total*w**3*np.exp((-w/a)**n)
     J_w[w < 0] = 0

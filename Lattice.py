@@ -42,7 +42,7 @@ class Parameters:
     or are calculated using generalised Marcus-Levich-Jortner (False)."""
 
     @property 
-    def kT(self):
+    def kT(self) -> float:
         return sp.k/sp.e * self.temp
 
 @dataclass
@@ -84,7 +84,7 @@ class Site:
     """The strength of the coupling between the ground state and the exciton state in eV."""
 
     # Check they are non-zero
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.const_recombination: 
             if self.krec_ex == 0 or self.krec_ct == 0:
                 raise ValueError("Recombination rates for exciton and CT states cannot be zero. Set krec_ex and krec_ct to finite values.")
@@ -93,7 +93,7 @@ class Site:
                 raise ValueError("Recombination rates for exciton and CT states cannot be zero. Set v_ex and v_ct to finite values.")
 
 class Lattice:
-    def __init__(self):
+    def __init__(self) -> None:
         self.sites=[]
         self.states=[]   
         
@@ -104,7 +104,7 @@ class Lattice:
                          ct_abs_prop:float,
                          krec_ex:float = 0, krec_ct:float = 0, 
                          v_ex:float = 0, v_ct:float = 0,
-                         const_recombination:bool = True):
+                         const_recombination:bool = True) -> None:
         counter_id = 0
         self.const_recombination = const_recombination       
            
@@ -148,7 +148,9 @@ class Lattice:
     def sites_to_dataframe(self, nonuniform = 0):
         return pd.DataFrame.from_records([s.to_dict(nonuniform) for s in self.sites])
     
-    def build_ham(self, params, F:list[float], min_dist_near_neighbour: float, dist_cs_min: float, disorder_site_ene: float, random_seed:int = 0):
+    def build_ham(self, params, F:list[float], 
+                  min_dist_near_neighbour: float, dist_cs_min: float, 
+                  disorder_site_ene: float, random_seed:int = 0) -> None:
         row = []
         col = []
         data = []
@@ -250,7 +252,7 @@ class Lattice:
         self.is_ex = is_ex
 
     #Find the eigenvalues and eigenvectors of the Hamiltonian 
-    def states_from_ham(self, params, max_energy_diff:float):  
+    def states_from_ham(self, params, max_energy_diff:float) -> None:  
         lambda_inner, lambda_outer = params.lambda_inner, params.lambda_outer, 
         evals,evecs = linalg.eigh(self.ham.toarray())
         #evals,evecs = eigsh(self.Ham, k=(len(self.sites)**2)-1, which = 'SM')
@@ -319,7 +321,7 @@ class Lattice:
             #adding newly calculated values onto the pre-existing states dataframe 
             self.states = pd.concat([self.states, states], ignore_index=True)  
     
-    def get_rate_mat(self, params):
+    def get_rate_mat(self, params) -> None:
         '''Redfield rates using a secular approximation as in Marcus and Renger 2002 & Quantum biology revisited 2020'''
         e_peak, kT = params.e_peak, params.kT
         lambda_outer, lambda_inner, = params.lambda_outer, params.lambda_inner
@@ -330,7 +332,7 @@ class Lattice:
         rates_mat = np.zeros((num_states, num_states), dtype = np.float32)
         inds = np.tril_indices_from(rates_mat, k=-1)
         len_inds = int(((num_states)*(num_states-1))/2) 
-        w = np.array([energies[inds[0][k]] - energies[inds[1][k]] for k in range(len_inds)])
+        w = np.array([energies[inds[0][k]] - energies[inds[1][k]] for k in range(len_inds)], dtype = np.float32)
         C = Redfield.C_re_2D_array(w, lambda_inner, e_peak, kT) 
         #Here I pick the kth element from inds[0], which gives the row index, and the kth element from inds[1], which gives the column index
         #This corresponds to a transition between the inds[0][k] and inds[1][k] eigenstates
@@ -339,7 +341,7 @@ class Lattice:
         rates_mat[(inds[1], inds[0])] = rates_mat[inds]*np.exp(-w/params.kT)  
         self.rates_mat = rates_mat
 
-    def solve_steady(self,params):
+    def solve_steady(self,params) -> None:
         isteady_n = np.zeros(len(self.states))
         a = deepcopy(self.rates_mat)
         a = np.transpose(a)
