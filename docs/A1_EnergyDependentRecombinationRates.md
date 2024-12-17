@@ -8,7 +8,7 @@ where $FCWD$ refers to the Franck-Condon weighted density of states, which descr
 
 $FCWD(0)=\frac{1}{\sqrt{4\pi\lambda_{l}kT}} \sum_(w=0)^{\infty}\sum_{t=0}^{\infty}\frac{e^{-S}S^{w-t} t!}{w!}\left[L_{t}^{w-t}(S)\right]^2 e^\left(-[E+\lambda_{l}+(w-t)\hbar\Omega]^2/4 \lambda_{l}kT\right)\frac{e^{-t\hbar\Omega⁄kT}}{Z_{\hbar\Omega}}$
 
-for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the reorganisation energy associated with the spectral density function described in the file 01_ModelDescription by defining $\lambda_{\mathrm{total}} = \lambda_{l} + \lambda_{h}$ and $\hbar\Omega$ is given by the value of the e_peak parameter. 
+for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the reorganisation energy associated with the spectral density function described in the file [01_ModelDescription](01_ModelDescription.md) by defining $\lambda_{\mathrm{total}} = \lambda_{l} + \lambda_{h}$ and $\hbar\Omega$ is given by the value of the e_peak parameter. 
 
 The overlap of the wavefunctions associated with the vibronic modes is approximated using the generalized Laguerre polynomials of degree $t$, $L_{t}^{w-t}(S)$. The number of ground state and excited state phonon modes ($w$ and $t$, respectively) can generally be truncated depending on the temperature and energy of the effective mode. Phonon states are considered to be in thermal equilibrium and their occupation is normalised using the canonical partition function
 
@@ -20,7 +20,7 @@ $V_{\mathrm{ex}} = \sum_{kk}c_{kk}^{\alpha}V_{\mathrm{ex}}$
 
 where $V_{\mathrm{ex}}$ is the coupling of excitonic basis elements. 
 
-Additionally, the model takes into account the fact that delocalised excited states typically have longer lifetimes than more locailised ones. To do this, the reorganisation energies are reduced by a factor of the inverse participation ratio assoicated with the relevant state ($\mathrm{IPR}$, see description in 03_CalculatingEigenstateProperties) :
+Additionally, the model takes into account the fact that delocalised excited states typically have longer lifetimes than more locailised ones. To do this, the reorganisation energies are reduced by a factor of the inverse participation ratio assoicated with the relevant state ($\mathrm{IPR}$, see description in [03_CalculatingEigenstateProperties](03_CalculatingEigenstateProperties.md)) :
 
 $\lambda_{\mathrm{x,ex}}^{\alpha}= \frac{\lambda_{\mathrm{x,ex}}}{\mathrm{IPR_{ex}}}$
 
