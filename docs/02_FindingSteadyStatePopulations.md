@@ -25,7 +25,7 @@ In our exemplar, the recombination of eigenstates to the ground state is assumed
 
 $k_{rec}^{\alpha} =  \sum_{k}k_{\mathrm{rec,ex}}|c_{kk}^{\alpha}|^{2}$ 
 
-Alternatively, if the const_recombination parameter is set to False, the decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules. This is described in further detail in [Appendix One](A1_EnergyDependentRecombinationRates). 
+Alternatively, if the const_recombination parameter is set to False, the decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules. This is described in further detail in [Appendix One](A1_EnergyDependentRecombinationRates.md). 
 
 # Rates of Population Transfer
 
