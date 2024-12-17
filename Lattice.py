@@ -73,21 +73,17 @@ class Site:
     the lattice sites included in the list Nearest_Neighbour."""
     krec_ex: float = field(default=0, kw_only=True)
     """The decay rate of excitonic states in s-1."""
-    krec_ct: float = field(default=0, kw_only=True)
-    """The decay rate of nearest neighbour charge transfer states in s-1."""
-    v_ct: float = field(default=0, kw_only=True)
-    """The strength of the coupling between the ground state and the nearest neighbour charge transfer state in eV."""
     v_ex: float = field(default=0, kw_only=True)
     """The strength of the coupling between the ground state and the exciton state in eV."""
 
     # Check they are non-zero
     def __post_init__(self) -> None:
         if self.const_recombination: 
-            if self.krec_ex == 0 or self.krec_ct == 0:
-                raise ValueError("Recombination rates for exciton and CT states cannot be zero. Set krec_ex and krec_ct to finite values.")
+            if self.krec_ex == 0:
+                raise ValueError("Recombination rate for exciton basis states cannot be zero. Set krec_ex to a finite value.")
         else:
-            if self.v_ct == 0 or self.v_ex == 0:
-                raise ValueError("Recombination rates for exciton and CT states cannot be zero. Set v_ex and v_ct to finite values.")
+            if self.v_ex == 0:
+                raise ValueError("Recombination rate for exciton basis states cannot be zero. Set v_ex to a finite value.")
 
 class Lattice:
     def __init__(self) -> None:
@@ -98,8 +94,8 @@ class Lattice:
                          dist_sites:int, min_dist_near_neighbour:float,
                          t0_homo:float, t0_lumo:float, 
                          d0:float, r0d:float, 
-                         krec_ex:float = 0, krec_ct:float = 0,
-                         v_ex:float = 0, v_ct:float = 0,
+                         krec_ex:float = 0, 
+                         v_ex:float = 0,
                          const_recombination:bool = True) -> None:
         counter_id = 0
         self.const_recombination = const_recombination       
@@ -112,12 +108,12 @@ class Lattice:
                 self.sites.append(Site(np.array([x*dist_sites, y*dist_sites, 0]),
                                        HOMO, LUMO, counter_id, const_recombination, 
                                        1, 
-                                       krec_ex = krec_ex, krec_ct = krec_ct))
+                                       krec_ex = krec_ex))
             else:
                 self.sites.append(Site(np.array([x*dist_sites, y*dist_sites, 0]),
                                        HOMO, LUMO, counter_id, const_recombination, 
                                        1, 
-                                       v_ct = v_ct, v_ex = v_ex))
+                                       v_ex = v_ex))
             site_vec[counter_id,:] = np.array([x*dist_sites, y*dist_sites, 0])
             counter_id = counter_id + 1  
         self.site_vec = site_vec
@@ -157,7 +153,6 @@ class Lattice:
         #Create empty lists to store the values of various quantities of interest 
         transdip_vec_ex = []
         krec_vec_ex = []
-        krec_vec_ct = []
         dist_he = []
         e_singlet = params.e_singlet
         is_ex = []    
@@ -179,16 +174,7 @@ class Lattice:
                 else:
                     transdip_vec_ex.append(0)
                     is_ex.append(0)
-                    krec_vec_ex.append(0)
-                if hol_pos.id in elec_pos.nearest_neighbour:
-                    #This is making the assumption that the coupling for CT/polaron states which aren't nearest neighbours
-                    #to the ground is negligible. 
-                    if const_recombination:
-                        krec_vec_ct.append(elec_pos.krec_ct)
-                    else: 
-                        krec_vec_ct.append(elec_pos.v_ct)
-                else:
-                    krec_vec_ct.append(0)                    
+                    krec_vec_ex.append(0)                   
                 #Calculate the values of the diagonal terms which go into the matrix  
                 row.append(counter)
                 col.append(counter)
@@ -238,8 +224,7 @@ class Lattice:
         #add more properties to the lattice to be used in rate calculations 
         self.basis = basis
         self.transdip_vec_ex = transdip_vec_ex
-        self.krec_vec_ex = krec_vec_ex
-        self.krec_vec_ct = krec_vec_ct         
+        self.krec_vec_ex = krec_vec_ex       
         self.dist_he = dist_he
         self.is_ex = is_ex
 
@@ -262,12 +247,10 @@ class Lattice:
         transdip_ex = [] 
         occupation_prob = [] 
         krec_ex = [] 
-        krec_ct = []
         is_ex = np.array(self.is_ex)
         basis = np.array(self.basis)
         if not params.const_recombination:
             v_eff_ex = [] 
-            v_eff_ct = []
         for i in range(len(evals)):
             list_evecs.append(evecs[:,i])
             occupation_probability = evecs[:,i]**2
@@ -278,7 +261,6 @@ class Lattice:
             if params.const_recombination:
                 IPR.append(calc_IPR(evecs[:,i], basis, is_ex))
                 krec_ex.append(occupation_probability @ self.krec_vec_ex)
-                krec_ct.append(occupation_probability @ self.krec_vec_ct)
             #Using generalised MLJ following Taylor and Kassal 2018/ D'Avino et al. J. Phys. Chem. Lett. 2016, 7, 536-540
             else:
                 IPR.append(calc_IPR(evecs[:,i], basis, is_ex))
@@ -288,23 +270,17 @@ class Lattice:
                 effective_outer_lambda_ex = lambda_outer*(1/IPR[i][0])
                 krec_ex.append(Recombination.decay_rate(effective_inner_lambda_ex, params.e_peak, effective_outer_lambda_ex, 
                                                          evals[i], effective_coupling_ex))
-
-                effective_coupling_ct = evecs[:,i]@self.krec_vec_ct
-                v_eff_ct.append(effective_coupling_ct)
-                effective_inner_lambda_ct = lambda_inner*(1/IPR[i][1] + 1/IPR[i][2])
-                effective_outer_lambda_ct = lambda_outer*(1/IPR[i][1] + 1/IPR[i][2])
-                krec_ct.append(Recombination.decay_rate(effective_inner_lambda_ct, params.e_peak, effective_outer_lambda_ct, 
-                                                         evals[i], effective_coupling_ct))                                
+                              
         states = pd.DataFrame({'energies': evals,'dis_eh': dis_st, 
                                 'IPR': IPR, 'ex_char': ex_char,
                                 'transdip_ex': transdip_ex,
-                                'krec_ex': krec_ex,'krec_ct': krec_ct,
+                                'krec_ex': krec_ex,
                                 'occupation_probability': occupation_prob})          
         #make it so the states are numbered 1 to n, not 0 to n-1
         states = states.sort_values(by=['energies'])
         states.insert(0, "state", np.arange(1, len(evals)+1))
         if params.const_recombination:
-            states = states.assign(v_effective_ex = v_eff_ex, v_effective_ct = v_eff_ct)
+            states = states.assign(v_effective_ex = v_eff_ex)
         if len(self.states) == 0:
             self.states = states   
         else:
@@ -338,7 +314,7 @@ class Lattice:
         self.states['gen'] = self.states.transdip_ex 
         for i in range(len(self.states)):
             a[i,i] = -sum(a[:,i])
-            a[i,i] = a[i,i] - self.states.iloc[i].krec_ex - self.states.iloc[i].krec_ct
+            a[i,i] = a[i,i] - self.states.iloc[i].krec_ex 
             isteady_n[i] = self.states.iloc[i].gen
         b = -isteady_n
         z = linalg.solve(a,b)

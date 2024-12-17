@@ -54,8 +54,8 @@ for i in range(len(parameter_array)):
                         min_dist_near_neighbour = num_sites_coupled*spacing + 0.01,
                         t0_homo = parameter_array[i], t0_lumo = parameter_array[i],
                         d0 = 5e-3, r0d = 0.1*spacing,
-                        v_ex = 0.02, v_ct = 0.001,
-                        ct_abs_prop = 0, const_recombination = False)
+                        v_ex = 0.02, 
+                        const_recombination = False)
     
     time_start = datetime.now()
     lattice.build_ham(params,
