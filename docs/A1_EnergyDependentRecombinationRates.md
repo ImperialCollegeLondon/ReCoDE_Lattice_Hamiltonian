@@ -14,19 +14,15 @@ The overlap of the wavefunctions associated with the vibronic modes is approxima
 
 $Z_{\hbar\Omega}=\sum_{t=0}^{\infty}e^{-t\hbar\Omega⁄kT}$
 
-In the exemplar, we define separate couplings to the ground state for excitonic and CT basis states:
+The coupling of the (delocalised) eigenstate to the ground state is calulated using:
 
 $V_{\mathrm{ex}} = \sum_{kk}c_{kk}^{\alpha}V_{\mathrm{ex}}$
 
-$V_{\mathrm{CT}} = \sum_{ij}c_{ij}^{\alpha}V_{\mathrm{CT}}$
-
-where $V_{\mathrm{ex}}$ is the coupling of excitonic basis elements and $V_{\mathrm{CT}}$ is the coupling of CT elements. Within our model, only CT elements with the electron and hole on adjacent lattice sites have significant coupling to ground state.
+where $V_{\mathrm{ex}}$ is the coupling of excitonic basis elements. 
 
 Additionally, the model takes into account the fact that delocalised excited states typically have longer lifetimes than more locailised ones. To do this, the reorganisation energies are reduced by a factor of the inverse participation ratio assoicated with the relevant state ($\mathrm{IPR}$, see description in 03_CalculatingEigenstateProperties) :
 
 $\lambda_{\mathrm{x,ex}}^{\alpha}= \frac{\lambda_{\mathrm{x,ex}}}{\mathrm{IPR_{ex}}}$
-
-$\lambda_{\mathrm{x,CT}}^{\alpha}= \frac{\lambda_{\mathrm{x,e}}}{\mathrm{IPR_{e}}} + \frac{\lambda_{\mathrm{x,h}}}{\mathrm{IPR_{h}}}$
 
 where $x$ can be either $l$ or $h$. 
 
