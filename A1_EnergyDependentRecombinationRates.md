@@ -1,0 +1,35 @@
+If the const_recombination parameter is set to False, the eigenstate's decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3):
+
+$k_{rec}^{\alpha} = \frac{2\pi}{\hbar} |V^{\alpha}|^2 FCWD^{\alpha}(\hbar\omega=0)$
+
+where $FCWD$ refers to the Franck-Condon weighted density of states, which describes the wavefunction overlap between vibronic modes of the excited and ground states (see reference 4). For non-radiative recombination, this is evaluated at $\hbar\omega = 0$ and is given by
+
+$FCWD(0)=\frac{1}{\sqrt{4\pi\lambda_{l}kT}} \sum_(w=0)^{\infty}\sum_{t=0}^{\infty}\frac{e^{-S}S^{w-t} t!}{w!}\left[L_{t}^{w-t}(S)\right]^2 e^\left(-[E+\lambda_{l}+(w-t)\hbar\Omega]^2/4 \lambda_{l}kT\right)\frac{e^{-t\hbar\Omega⁄kT}}{Z_{\hbar\Omega}}$
+
+for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the reorganisation energy associated with the spectral density function described in the file 01_ModelDescription by defining $\lambda_{\mathrm{total}} = \lambda_{l} + \lambda_{h}$ and $\hbar\Omega$ is given by the value of the e_peak parameter. 
+
+The overlap of the wavefunctions associated with the vibronic modes is approximated using the generalized Laguerre polynomials of degree $t$, $L_{t}^{w-t}(S)$. The number of ground state and excited state phonon modes ($w$ and $t$, respectively) can generally be truncated depending on the temperature and energy of the effective mode. Phonon states are considered to be in thermal equilibrium and their occupation is normalised using the canonical partition function
+
+$Z_{\hbar\Omega}=\sum_{t=0}^{\infty}e^{-t\hbar\Omega⁄kT}$
+
+In the exemplar, we define separate couplings to the ground state for excitonic and CT basis states:
+
+$V_{\mathrm{ex}} = \sum_{kk}c_{kk}^{\alpha}V_{\mathrm{ex}}$
+
+$V_{\mathrm{CT}} = \sum_{ij}c_{ij}^{\alpha}V_{\mathrm{CT}}$
+
+where $V_{\mathrm{ex}}$ is the coupling of excitonic basis elements and $V_{\mathrm{CT}}$ is the coupling of CT elements. Within our model, only CT elements with the electron and hole on adjacent lattice sites have significant coupling to ground state.
+
+Additionally, the model takes into account the fact that delocalised excited states typically have longer lifetimes than more locailised ones. To do this, the reorganisation energies are reduced by a factor of the inverse participation ratio assoicated with the relevant state ($\mathrm{IPR}$, see description in 03_CalculatingEigenstateProperties) :
+
+$\lambda_{\mathrm{x,ex}}^{\alpha}= \frac{\lambda_{\mathrm{x,ex}}}{\mathrm{IPR_{ex}}}$
+
+$\lambda_{\mathrm{x,CT}}^{\alpha}= \frac{\lambda_{\mathrm{x,e}}}{\mathrm{IPR_{e}}} + \frac{\lambda_{\mathrm{x,h}}}{\mathrm{IPR_{h}}}$
+
+where $x$ can be either $l$ or $h$. 
+
+# References
+1) Sumi, H. Theory on Rates of Excitation-Energy Transfer between Molecular Aggregates through Distributed Transition Dipoles with Application to the Antenna System in Bacterial Photosynthesis. J. Phys. Chem. B 103, 252–260 (1999).
+2) B. Taylor, N. & Kassal, I. Generalised Marcus theory for multi-molecular delocalised charge transfer. Chemical Science 9, 2942–2951 (2018).
+3) Azzouzi, M., Yan, J., Kirchartz, T. et al. Nonradiative Voltage Losses in Bulk-Heterojunction Organic Photovoltaics. Phys. Rev. X 8, 031055 (2018).
+4) https://chem.libretexts.org/Courses/Pacific_Union_College/Quantum_Chemistry/13%3A_Molecular_Spectroscopy/13.07%3A_The_Franck-Condon_Principle
