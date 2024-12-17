@@ -1,4 +1,4 @@
-# Calculation of Recombination Rates Using Generalised Marcus-Levich-Jortner
+a]# Calculation of Recombination Rates Using Generalised Marcus-Levich-Jortner
 
 If the const_recombination parameter is set to False, the eigenstate's decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3):
 
@@ -12,7 +12,7 @@ for a transition from an excited state to the ground state. It is defined in ter
 
 <img src="https://github.com/user-attachments/assets/64880c22-bd9d-4690-ad0c-0c7705dee72d" alt="Alt Text" style="width:50%; height:auto;">
 
-Figure One: Illustration of the Franck-Condon Principle. The $E_0$ ($E_1$) potential well represents the energy level of the ground (first excited) state as a function of the nuclear coordinate, $q_i$. The potential energy of the electronic state is modelled as having a quadratic depenence on $q_i$, giving rise to a series of vibronic modes for each electronic energy level. The number of phonons associated with a given vibronic mode is indicated by the quantum number $\nu$. The rate at which the first excited state decays to the ground state will depend upon the wavefunction overlap of the vibronic part of both wavefunctions. Picture credit: By Samoza, CC BY-SA 3.0, https://commons.wikimedia.org/w/index.php?curid=33461268
+Figure One: Illustration of the Franck-Condon Principle. The $E_0$ ($E_1$) potential well represents the energy level of the ground (first excited) state as a function of the nuclear coordinate, $q_i$. The potential energy of the electronic state is modelled as having a quadratic depenence on $q_i$, giving rise to a series of vibronic modes for each electronic energy level. The number of phonons associated with a given vibronic mode is indicated by the quantum number $\nu$. The rate at which the first excited state decays to the ground state will depend upon the wavefunction overlap of the vibronic part of both wavefunctions. Picture credit: By Samoza, CC BY-SA 3.0, [Wikipedia](https://commons.wikimedia.org/w/index.php?curid=33461268). 
 
 The overlap of the wavefunctions associated with the vibronic modes is approximated using the generalized Laguerre polynomials of degree $t$, $L_{t}^{w-t}(S)$. The number of ground state and excited state phonon modes ($w$ and $t$, respectively) can generally be truncated depending on the temperature and energy of the effective mode. Phonon states are considered to be in thermal equilibrium and their occupation is normalised using the canonical partition function
 
@@ -34,4 +34,4 @@ where $x$ can be either $l$ or $h$.
 1) Sumi, H. Theory on Rates of Excitation-Energy Transfer between Molecular Aggregates through Distributed Transition Dipoles with Application to the Antenna System in Bacterial Photosynthesis. J. Phys. Chem. B 103, 252–260 (1999).
 2) B. Taylor, N. & Kassal, I. Generalised Marcus theory for multi-molecular delocalised charge transfer. Chemical Science 9, 2942–2951 (2018).
 3) Azzouzi, M., Yan, J., Kirchartz, T. et al. Nonradiative Voltage Losses in Bulk-Heterojunction Organic Photovoltaics. Phys. Rev. X 8, 031055 (2018).
-4) https://chem.libretexts.org/Courses/Pacific_Union_College/Quantum_Chemistry/13%3A_Molecular_Spectroscopy/13.07%3A_The_Franck-Condon_Principle
+4) [Chemistry LibreTexts](https://chem.libretexts.org/Courses/Pacific_Union_College/Quantum_Chemistry/13%3A_Molecular_Spectroscopy/13.07%3A_The_Franck-Condon_Principle). 
