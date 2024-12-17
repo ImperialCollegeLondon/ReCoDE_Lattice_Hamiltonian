@@ -62,9 +62,6 @@ class Site:
     or are calculated using generalised Marcus-Levich-Jortner (False)."""
     transition_dipole_ex: float
     """Number between zero and one which controls the rate at which excitons are generated in the lattice."""
-    transition_dipole_ct: float 
-    """Number between zero and one which controls the rate at which nearest neighbour 
-    charge transfer states are generated in the lattice."""
     nearest_neighbour: list = field(default_factory = list)
     """List containing the IDs of all the lattice sites to include when calculating the size of the dipole-dipole coupling."""
     LUMO_coupling: list = field(default_factory = list)
@@ -101,8 +98,7 @@ class Lattice:
                          dist_sites:int, min_dist_near_neighbour:float,
                          t0_homo:float, t0_lumo:float, 
                          d0:float, r0d:float, 
-                         ct_abs_prop:float,
-                         krec_ex:float = 0, krec_ct:float = 0, 
+                         krec_ex:float = 0, krec_ct:float = 0,
                          v_ex:float = 0, v_ct:float = 0,
                          const_recombination:bool = True) -> None:
         counter_id = 0
@@ -115,12 +111,12 @@ class Lattice:
             if const_recombination:
                 self.sites.append(Site(np.array([x*dist_sites, y*dist_sites, 0]),
                                        HOMO, LUMO, counter_id, const_recombination, 
-                                       1, ct_abs_prop, 
+                                       1, 
                                        krec_ex = krec_ex, krec_ct = krec_ct))
             else:
                 self.sites.append(Site(np.array([x*dist_sites, y*dist_sites, 0]),
                                        HOMO, LUMO, counter_id, const_recombination, 
-                                       1, ct_abs_prop, 
+                                       1, 
                                        v_ct = v_ct, v_ex = v_ex))
             site_vec[counter_id,:] = np.array([x*dist_sites, y*dist_sites, 0])
             counter_id = counter_id + 1  
@@ -161,7 +157,6 @@ class Lattice:
         #Create empty lists to store the values of various quantities of interest 
         transdip_vec_ex = []
         krec_vec_ex = []
-        transdip_vec_ct = []
         krec_vec_ct = []
         dist_he = []
         e_singlet = params.e_singlet
@@ -186,7 +181,6 @@ class Lattice:
                     is_ex.append(0)
                     krec_vec_ex.append(0)
                 if hol_pos.id in elec_pos.nearest_neighbour:
-                    transdip_vec_ct.append(elec_pos.transition_dipole_ct)
                     #This is making the assumption that the coupling for CT/polaron states which aren't nearest neighbours
                     #to the ground is negligible. 
                     if const_recombination:
@@ -194,7 +188,6 @@ class Lattice:
                     else: 
                         krec_vec_ct.append(elec_pos.v_ct)
                 else:
-                    transdip_vec_ct.append(0)
                     krec_vec_ct.append(0)                    
                 #Calculate the values of the diagonal terms which go into the matrix  
                 row.append(counter)
@@ -244,7 +237,6 @@ class Lattice:
         self.ham = csr_array((data, (row, col)), shape=(len(self.sites)**2,len(self.sites)**2))
         #add more properties to the lattice to be used in rate calculations 
         self.basis = basis
-        self.transdip_vec_ct = transdip_vec_ct
         self.transdip_vec_ex = transdip_vec_ex
         self.krec_vec_ex = krec_vec_ex
         self.krec_vec_ct = krec_vec_ct         
@@ -268,7 +260,6 @@ class Lattice:
         IPR = []
         ex_char = [] 
         transdip_ex = [] 
-        transdip_ct = [] 
         occupation_prob = [] 
         krec_ex = [] 
         krec_ct = []
@@ -283,7 +274,6 @@ class Lattice:
             occupation_prob.append(occupation_probability)
             dis_st.append(occupation_probability @ self.dist_he)
             transdip_ex.append(occupation_probability @ self.transdip_vec_ex)
-            transdip_ct.append(occupation_probability @ self.transdip_vec_ct)
             ex_char.append(occupation_probability @ is_ex)
             if params.const_recombination:
                 IPR.append(calc_IPR(evecs[:,i], basis, is_ex))
@@ -307,7 +297,7 @@ class Lattice:
                                                          evals[i], effective_coupling_ct))                                
         states = pd.DataFrame({'energies': evals,'dis_eh': dis_st, 
                                 'IPR': IPR, 'ex_char': ex_char,
-                                'transdip_ex': transdip_ex,'transdip_ct': transdip_ct,
+                                'transdip_ex': transdip_ex,
                                 'krec_ex': krec_ex,'krec_ct': krec_ct,
                                 'occupation_probability': occupation_prob})          
         #make it so the states are numbered 1 to n, not 0 to n-1
@@ -345,7 +335,7 @@ class Lattice:
         isteady_n = np.zeros(len(self.states))
         a = deepcopy(self.rates_mat)
         a = np.transpose(a)
-        self.states['gen'] = self.states.transdip_ex + self.states.transdip_ct        
+        self.states['gen'] = self.states.transdip_ex 
         for i in range(len(self.states)):
             a[i,i] = -sum(a[:,i])
             a[i,i] = a[i,i] - self.states.iloc[i].krec_ex - self.states.iloc[i].krec_ct
