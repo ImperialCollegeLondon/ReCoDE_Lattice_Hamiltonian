@@ -1,4 +1,4 @@
-a]# Calculation of Recombination Rates Using Generalised Marcus-Levich-Jortner
+# Calculation of Recombination Rates Using Generalised Marcus-Levich-Jortner
 
 If the const_recombination parameter is set to False, the eigenstate's decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3):
 
