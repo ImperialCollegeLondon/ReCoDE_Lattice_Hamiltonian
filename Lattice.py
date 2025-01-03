@@ -136,9 +136,6 @@ class Lattice:
                     self.sites[ii].HOMO_coupling.append(0)
                 self.sites[jj].dipole_coupling.append(d0*((distance_bet_sites-dist_sites)/r0d+1)**-3)
                 self.sites[ii].dipole_coupling.append(d0*((distance_bet_sites-dist_sites)/r0d+1)**-3) 
-
-    def sites_to_dataframe(self, nonuniform = 0):
-        return pd.DataFrame.from_records([s.to_dict(nonuniform) for s in self.sites])
     
     def build_ham(self, params, F:list[float], 
                   min_dist_near_neighbour: float, dist_cs_min: float, 
