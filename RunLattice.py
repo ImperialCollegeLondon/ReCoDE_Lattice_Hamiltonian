@@ -1,8 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 29 16:26:14 2024
+"""Calculate eigenstates of the lattice for several values of a given input parameter. 
 
-@author: ljh3218
+This file allows the user to see how the properties of the system's eigenstates depend 
+on the value of the input parameter t0. This paraemter controls the electronic coupling 
+between lattice sites. Once the eigenstates have been found for 5 values of t0, the code
+then plots the eigenstates' energies as a function of the electron-hole separation of
+the eigenstate.'
 """
 
 #%% Import things
@@ -17,7 +19,7 @@ import matplotlib.pyplot as plt
 now = datetime.now()
 pwd = os.getcwd()
 
-save_path = pwd + '/plots/' + now.strftime('%d%b%Y-1/') # where you want to save them
+save_path = pwd + '/plots/' + now.strftime('%d%b%Y-1/') 
 if not os.path.exists(save_path): os.makedirs(save_path)
 
 #%% Calculate states vs parameter of interest for 0 field
@@ -27,8 +29,8 @@ labels = ['1 meV', '2 meV', '3 meV', '4 meV', '5 meV']
 
 lattice_dict = {}
 
-spacing = 10   # Angstrom
-num_sites_coupled =  1.45 #1.45, not one here as I want to count diagonal neighbours as CT states
+spacing = 10   
+num_sites_coupled =  1.45 
 size = 4
 
 j0 = 1.5
@@ -37,8 +39,6 @@ min_dist = min([size, r0j*(j0/0.0257 - 1)])
 
 save = 1
 for i in range(len(parameter_array)):
-#kout is the extraction rate of the separted charges
-#distance over which charges are considered 'separated' is determined by dist_CS_min parameter in L0.buildHam
     params = Parameters(temp = 300, 
                     e_peak = 0.16,
                     lambda_inner = 0.202, lambda_outer = 0.048,
@@ -46,7 +46,6 @@ for i in range(len(parameter_array)):
                     e_singlet = 1.4,
                     const_recombination = False)
 
-#Build the lattice
     lattice = Lattice()
     lattice.generate_uniform(size = size,
                         HOMO = 0, LUMO = 1.8,
@@ -93,11 +92,13 @@ colours = [cmap(i) for i in values]
 
 for i in range(len(parameter_array)):
     ax.plot(lattice_dict[i].states.dis_eh, lattice_dict[i].states.energies, 
-            label = labels[i], color=colours[i], marker = 'x', ls = ' ', zorder = len(parameter_array)-i)
+            label = labels[i], color=colours[i], marker = 'x', ls = ' ', 
+            zorder = len(parameter_array)-i)
     
 ax.set_xlabel('r$_{e-h}$ (Lattice Sites)', fontsize = 16)
 ax.set_ylabel('Energy (eV)', fontsize = 16)
-ax.tick_params(axis = 'both', direction = 'in', top = True, right = True, labelsize = 14)
+ax.tick_params(axis = 'both', direction = 'in', 
+               top = True, right = True, labelsize = 14)
 ax.legend(fontsize = 14, loc = 'center left', bbox_to_anchor = [1.03, 0.5])
 
 if save == 1:
