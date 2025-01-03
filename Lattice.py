@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Calculate eigenstates and populations for a 2D lattice of molecules.
 
 The purpose of this module is to build the Hamiltonian which describes the (optically) 
@@ -6,20 +5,20 @@ excited states of a 2D lattice of organic molecules. After building the Hamilton
 code finds its eigenstates and the corresponding eigenvalues. Additionally, the 
 populations of the eigenstates are calculated under conditions of constant illumination.
 """
-import scipy.constants as sp
+import math
+from copy import deepcopy
+from dataclasses import dataclass, field
+from itertools import combinations, product
+
 import numpy as np
 import pandas as pd
-import math
-
-import Redfield as Redfield
-import Recombination as Recombination
-
-from scipy.sparse import csr_array
+import scipy.constants as sp
 from scipy import linalg
-from copy import deepcopy
-from itertools import combinations
-from itertools import product
-from dataclasses import dataclass, field
+from scipy.sparse import csr_array
+
+import Recombination as Recombination
+import Redfield as Redfield
+
 
 @dataclass
 class Parameters:
@@ -90,8 +89,11 @@ class Site:
 
     # Check they are non-zero
     def __post_init__(self) -> None:
-        """Check that a value has been set for the recombination paraemter which is 
-        relevant for the chosen value of const_recombination."""
+        """Check that a value has been set for the recombination parameter.
+        
+        If clause so that the code checks the value of the recombination parameter
+        which is relevant for the chosen value of const_recombination.
+        """
         if self.const_recombination: 
             if self.krec_ex == 0:
                 raise ValueError("Recombination rate for exciton basis states cannot \
@@ -105,8 +107,11 @@ class Lattice:
     """Class used to constuct the system's Hamiltonian and find its properties."""
     
     def __init__(self) -> None:
-        """Declare empty lists of sites and states which will be populated by the
-        generate_uniform and build_ham functions, respectively."""
+        """Declare empty lists of sites and states.
+        
+        The sites and states lists will be populated by the generate_uniform and 
+        build_ham functions, respectively.
+        """
         self.sites=[]
         self.states=[]   
         
@@ -126,15 +131,15 @@ class Lattice:
             LUMO: Energy of the material's lowest unoccupied molecular orbital in eV.
             dist_sites: The separation between adjacent lattice sites. Units are 
                 angstom.
-            min_dist_near_neighbour: The maximum separtion between two lattice sites for 
-                which excitonic coupling is considered to be non-zero. Units are 
+            min_dist_near_neighbour: The maximum separtion between two lattice sites 
+                for which excitonic coupling is considered to be non-zero. Units are 
                 angstrom.
             t0_homo: The electronic coupling between the HOMOs of two adjacent lattice 
                 sites. Units are eV.
             t0_lumo: The electronic coupling between the LUMOs of two adjacent lattice 
                 sites. Units are eV.
-            d0: Parameter determining the strength of the dipole-dipole coupling between 
-                excitons. Units are eV.
+            d0: Parameter determining the strength of the dipole-dipole coupling 
+                between excitons. Units are eV.
             r0d: Parameter determining the strength of the dipole-dipole coupling 
                 between excitons. Units are eV.
             const_recombination: A switch which determines whether recombination rates 
@@ -196,14 +201,14 @@ class Lattice:
             params: An instance of the parameters class.
             F: The electric field applied to the lattice in the form of a list contaning
                 the x, y and z components of the field i.e., F = [Fx, Fy, Fz].
-            min_dist_near_neighbour: The maximum separtion between two lattice sites for 
-                which excitonic coupling is considered to be non-zero. Units are 
+            min_dist_near_neighbour: The maximum separtion between two lattice sites 
+                for which excitonic coupling is considered to be non-zero. Units are 
                 angstrom.
             disorder_site_ene: The static disorder associated with the energies of the 
                 basis states. Diagonal elements of the Hamiltonian will have this have
                 an energy added to them which is randomly drawn from a Gaussian centred 
-                about zero and with a standard deviation of disorder_site_ene. Units are 
-                eV.
+                about zero and with a standard deviation of disorder_site_ene. Units 
+                are eV.
             random_seed: Optional parameter which can be used to set the value of the 
                 random seed. Setting this value allows one to rerun a given instance of 
                 the lattice. Default value is 0, meaning no user control of the random
@@ -259,8 +264,8 @@ class Lattice:
         for ii,jj in combinations(range(len(basis)),2): 
             if basis[jj][0] in self.sites[basis[ii][0]].nearest_neighbour \
                 and basis[ii][1] == basis[jj][1]:
-                #index() returns the index of the first occurance of the specified value 
-                idx_el = self.sites[basis[ii][0]].nearest_neighbour.index(basis[jj][0])                        
+                #index returns the index of the first occurance of the specified value. 
+                idx_el = self.sites[basis[ii][0]].nearest_neighbour.index(basis[jj][0])
                 row.append(ii)
                 col.append(jj)
                 #hopping for electron 
@@ -280,7 +285,7 @@ class Lattice:
                 data.append(self.sites[basis[ii][0]].dipole_coupling[idx_ex])
             if basis[jj][1] in self.sites[basis[ii][1]].nearest_neighbour \
                 and basis[ii][0]==basis[jj][0]:  
-                idx_h = self.sites[basis[ii][1]].nearest_neighbour.index(basis[jj][1])                      
+                idx_h = self.sites[basis[ii][1]].nearest_neighbour.index(basis[jj][1])
                 row.append(ii)
                 col.append(jj)
                 data.append(self.sites[basis[ii][1]].HOMO_coupling[idx_h])
@@ -370,39 +375,43 @@ class Lattice:
             self.states = pd.concat([self.states, states], ignore_index=True)  
     
     def get_rate_mat(self, params) -> None:
-        '''Calculate rates of population transfer between eigenstates.
+        """Calculate rates of population transfer between eigenstates.
         
         Rates are calculates using Redfield theory within the secular approximation as 
         in Marcus and Renger 2002 & Quantum biology revisited 2020.
         
         Parameters:
             params: An instance of the parameters class.
-        '''
+        """
         e_peak, kT = params.e_peak, params.kT
         lambda_outer, lambda_inner, = params.lambda_outer, params.lambda_inner
         lambda_inner = Redfield.norm_J_Renger(lambda_outer+lambda_inner, e_peak)
         energies = np.array(self.states.energies)
         num_states = len(energies)
-        occupation_prob = np.array([self.states.occupation_probability[i] for i in range(num_states)])        
+        occupation_prob = np.array([self.states.occupation_probability[i] \
+                                    for i in range(num_states)])        
         rates_mat = np.zeros((num_states, num_states), dtype = np.float32)
         inds = np.tril_indices_from(rates_mat, k=-1)
         len_inds = int(((num_states)*(num_states-1))/2) 
-        w = np.array([energies[inds[0][k]] - energies[inds[1][k]] for k in range(len_inds)], dtype = np.float32)
+        w = np.array([energies[inds[0][k]] - energies[inds[1][k]] \
+                        for k in range(len_inds)], dtype = np.float32)
         C = Redfield.C_re_2D_array(w, lambda_inner, e_peak, kT) 
         #Here I pick the kth element from inds[0], which gives the row index, and the 
         #kth element from inds[1], which gives the column index. This corresponds to a 
         #transition between the inds[0][k] and inds[1][k] eigenstates.
-        gamma_Cw_real_tot = np.array([occupation_prob[inds[0][k]]@occupation_prob[inds[1][k]]*C[k] for k in range(len_inds)])
+        gamma_Cw_real_tot = np.array([occupation_prob[inds[0][k]]@ \
+                                        occupation_prob[inds[1][k]]*C[k] \
+                                        for k in range(len_inds)])
         rates_mat[inds] = gamma_Cw_real_tot
         rates_mat[(inds[1], inds[0])] = rates_mat[inds]*np.exp(-w/params.kT)  
         self.rates_mat = rates_mat
 
     def solve_steady(self,params) -> None:
-        '''Solve Pauli's Master Equation to find the populations of the eingenstates.
+        """Solve Pauli's Master Equation to find the populations of the eingenstates.
         
         Parameters:
             params: An instance of the parameters class.
-        '''
+        """
         isteady_n = np.zeros(len(self.states))
         a = deepcopy(self.rates_mat)
         a = np.transpose(a)

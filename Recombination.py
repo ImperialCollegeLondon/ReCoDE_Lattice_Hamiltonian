@@ -1,15 +1,17 @@
 """Calculate the decay rates of eigenstates using generalised Marcus-Levich-Jornter.
 
-If const_recombination is set to False, the decay_rate function of this module is called 
-by the states_from_ham function of the Lattice class in Lattice.py to calculate the 
-decay rate of the eigenstates. 
+If const_recombination is set to False, the decay_rate function of this module is 
+called by the states_from_ham function of the Lattice class in Lattice.py to calculate 
+the decay rate of the eigenstates. 
 
 To do: kT should be an argument and not hard coded into the functions. 
 """
 
-import numpy as np
 from itertools import product
+
+import numpy as np
 import scipy.constants as const
+
 
 def laguerre(alpha:int, n:int, x:float) -> float:
     """Calculate values of generalised Laguerre polynomials using a recursion relation.
@@ -54,17 +56,16 @@ def FCWD_single_nm_v2(n:int, m:int, lambda_inner:float,
         m: Vibrational energy level of the ground state.
         lambda_inner: The inner reorganisation energy of each molecule in the lattice. 
             Units are eV.
-        e_peak: The energy of the peak of the spectral density function in eV. Typically 
-            0.16 eV for organic molecules.
+        e_peak: The energy of the peak of the spectral density function in eV. 
+            Typically 0.16 eV for organic molecules.
         lambda_outer: The outer reorganisation energy of each molecule in the lattice. 
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
         
     Returns:
-        Float: The decay rate from an excited state in vibrational level m to the ground 
-            state in vibrational level n.
+        Float: The decay rate from an excited state in vibrational level m to the 
+            ground state in vibrational level n.
     """
-
     kT = 0.0257
     #Huang-Rhys factor
     S = lambda_inner/e_peak
@@ -86,8 +87,8 @@ def calc_FCWD_total(lambda_inner:float, e_peak:float, lambda_outer:float, w:floa
     Parameters:
         lambda_inner: The inner reorganisation energy of each molecule in the lattice. 
             Units are eV.
-        e_peak: The energy of the peak of the spectral density function in eV. Typically 
-            0.16 eV for organic molecules.
+        e_peak: The energy of the peak of the spectral density function in eV. 
+            Typically 0.16 eV for organic molecules.
         lambda_outer: The outer reorganisation energy of each molecule in the lattice. 
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
@@ -114,8 +115,8 @@ def decay_rate(lambda_inner:float, e_peak:float, lambda_outer:float,
     Parameters:
         lambda_inner: The inner reorganisation energy of each molecule in the lattice. 
             Units are eV.
-        e_peak: The energy of the peak of the spectral density function in eV. Typically 
-            0.16 eV for organic molecules.
+        e_peak: The energy of the peak of the spectral density function in eV. 
+            Typically 0.16 eV for organic molecules.
         lambda_outer: The outer reorganisation energy of each molecule in the lattice. 
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.

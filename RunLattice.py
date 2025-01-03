@@ -1,4 +1,4 @@
-"""Calculate eigenstates of the lattice for several values of a given input parameter. 
+"""Calculate eigenstates of the lattice for several values of a given input parameter.
 
 This file allows the user to see how the properties of the system's eigenstates depend 
 on the value of the input parameter t0. This paraemter controls the electronic coupling 
@@ -8,19 +8,21 @@ the eigenstate.'
 """
 
 #%% Import things
-from Lattice import Lattice
-from Lattice import Parameters
-from datetime import datetime
 import os
-import numpy as np
+from datetime import datetime
+
 import matplotlib as mpl
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
+import numpy as np
+
+from Lattice import Lattice, Parameters
 
 now = datetime.now()
 pwd = os.getcwd()
 
 save_path = pwd + '/plots/' + now.strftime('%d%b%Y-1/') 
-if not os.path.exists(save_path): os.makedirs(save_path)
+if not os.path.exists(save_path): 
+    os.makedirs(save_path)
 
 #%% Calculate states vs parameter of interest for 0 field
 parameter_to_vary = 't0'
