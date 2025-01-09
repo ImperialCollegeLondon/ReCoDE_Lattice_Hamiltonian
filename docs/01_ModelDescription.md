@@ -43,4 +43,12 @@ Putting these parts together, we can write the Hamiltonian describing the electr
 
 where basis states indexed with k are excitonic in character, while those indexed using i and j describe electron-hole pairs. The i index refers to the lattice site on which the electron is located and the j index to that on which the hole is localised. We then diagonalise this Hamiltonian to find the eigenstates and energy levels of the system.
 
+## Coupling to the Environment
+
+While the Hamiltonian described in the previous section calculates the electronic eigenstates of the system, it neglects their coupling to the environment i.e., electron-phonon coupling. In organic crystals, the dominant phonon modes typically correspond to vibrations of the intermolecular bonds of the individual molecules in the lattice. Thus, each lattice site has its own set of independent phonon modes which we assume are non-interacting. As organic molecules have multiple vibrational modes, it is common to approximate the multiple discrete modes by a single spectral density function, $J(\hbar\omega)$, where $\hbar\omega$ is the phonon energy. The spectral density function assumed in this exemplar is shown in Figure One, below. 
+
+
+For the purposes of this exemplar, we assume that the electron-phonon coupling is sufficiently small that we can treat it using second order perturbation theory. Thus, within our model, the electron-phonon coupling is what drives transistions between eigensates, as we discuss in greater detail in 
+
+
 $^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
