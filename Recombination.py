@@ -22,7 +22,7 @@ def laguerre(alpha: int, n: int, x: float) -> float:
     See https://en.wikipedia.org/wiki/Laguerre_polynomials for more information about
     Laguerre polynomials.
 
-    Parameters:
+    Args:
         alpha: Parameter determining which Laguerre polynomial is needed.
         n: Parameter determining which Laguerre polynomial is needed.
         x: Huang-Rhys factor of the high frequency phonon mode assocaited with each
@@ -55,7 +55,7 @@ def FCWD_single_nm_v2(
     vibrational level m to the ground state in vibrational level n. It uses the
     formula found in https://journals.aps.org/prx/pdf/10.1103/PhysRevX.8.031055
 
-    Parameters:
+    Args:
         n: Vibrational energy level of the excited state.
         m: Vibrational energy level of the ground state.
         lambda_inner: The inner reorganisation energy of each molecule in the lattice.
@@ -97,7 +97,7 @@ def calc_FCWD_total(
     N and M have been set to default values which are reasonable for kT = 0.0257 eV. If
     interested in a lower temperature, N and M could be lowered.
 
-    Parameters:
+    Args:
         lambda_inner: The inner reorganisation energy of each molecule in the lattice.
             Units are eV.
         e_peak: The energy of the peak of the spectral density function in eV.
@@ -127,7 +127,7 @@ def decay_rate(
 ) -> float:
     """Calculates the decay rate of an excited state to the ground state.
 
-    Parameters:
+    Args:
         lambda_inner: The inner reorganisation energy of each molecule in the lattice.
             Units are eV.
         e_peak: The energy of the peak of the spectral density function in eV.

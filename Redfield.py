@@ -15,7 +15,7 @@ def C_re_2D_array(
 ) -> NDArray[np.float32]:
     """The correlation function of the lattice.
 
-    Parameters:
+    Args:
         w: A numpy array containing the energy differences between all the eigenstates
             of the lattice.
         lambda_total: The total reorganisation energy associated with each molecule.
@@ -42,7 +42,7 @@ def C_re_2D_array(
 def nw(w: NDArray[np.float32], kT: float) -> NDArray[np.float32]:
     """Bose-Einstein occupancy function.
 
-    Parameters:
+    Args:
         w: A numpy array containing the energy differences between all the eigenstates
             of the lattice.
         kT: The typical thermal energy of the lattice in eV.
@@ -70,7 +70,7 @@ def J_Renger(
 ) -> NDArray[np.float32]:
     """The spectral density function of the molecules' phonon modes.
 
-    Parameters:
+    Args:
         w: A numpy array containing the energy differences between all the eigenstates
             of the lattice.
         lambda_total: The total reorganisation energy associated with each molecule.
@@ -95,7 +95,7 @@ def J_Renger(
 def norm_J_Renger(lambda_total: float, e_peak: float, n: int = 15) -> float:
     """Ensures that the spectral density function is correctly normalised.
 
-    Parameters:
+    Args:
         lambda_total: The total reorganisation energy associated with each molecule.
             Defined to be the sum of the outer and inner reorganisation energies.
             Units are eV.

@@ -139,7 +139,7 @@ class Lattice:
     ) -> None:
         """Build the lattice and assign properties to lattice sites.
 
-        Parameters:
+        Args:
             size: Determines the total number of lattice sites. The lattice will be a
                 size x size square.
             HOMO: Energy of the material's highest occupied molecular orbital in eV.
@@ -236,7 +236,7 @@ class Lattice:
     ) -> None:
         """Build the Hamiltonian for the lattice defined by self.sites.
 
-        Parameters:
+        Args:
             params: An instance of the parameters class.
             F: The electric field applied to the lattice in the form of a list contaning
                 the x, y and z components of the field i.e., F = [Fx, Fy, Fz].
@@ -360,7 +360,7 @@ class Lattice:
         Levich-Jortner following Taylor and Kassal 2018 and D'Avino et al. J. Phys.
         Chem. Lett. 2016, 7, 536-540.
 
-        Parameters:
+        Args:
             params: An instance of the parameters class.
             max_energy_diff: An energy cut-off used to limit the number of eigenstates
                 which are analysed. Eigenstates with an energy greater than that of the
@@ -444,7 +444,7 @@ class Lattice:
         Rates are calculates using Redfield theory within the secular approximation as
         in Marcus and Renger 2002 & Quantum biology revisited 2020.
 
-        Parameters:
+        Args:
             params: An instance of the parameters class.
         """
         e_peak, kT = params.e_peak, params.kT
@@ -482,7 +482,7 @@ class Lattice:
     def solve_steady(self, params) -> None:
         """Solve Pauli's Master Equation to find the populations of the eingenstates.
 
-        Parameters:
+        Args:
             params: An instance of the parameters class.
         """
         isteady_n = np.zeros(len(self.states))
@@ -506,7 +506,7 @@ def calc_IPR(
     These are calculated following method in D'Avino et al. J. Phys. Chem. Lett.
     2016, 7, 536-540.
 
-    Parameters:
+    Args:
         eigvec: List of the eigenvectors of the system.
         basis: List of the system's basis states.
         is_ex: List identifying which elements of basis correspond to excitonic
