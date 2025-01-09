@@ -43,12 +43,14 @@ Putting these parts together, we can write the Hamiltonian describing the electr
 
 where basis states indexed with k are excitonic in character, while those indexed using i and j describe electron-hole pairs. The i index refers to the lattice site on which the electron is located and the j index to that on which the hole is localised. We then diagonalise this Hamiltonian to find the eigenstates and energy levels of the system.
 
+$^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
+
 ## Coupling to the Environment
 
-While the Hamiltonian described in the previous section calculates the electronic eigenstates of the system, it neglects their coupling to the environment i.e., electron-phonon coupling. In organic crystals, the dominant phonon modes typically correspond to vibrations of the intermolecular bonds of the individual molecules in the lattice. Thus, each lattice site has its own set of independent phonon modes which we assume are non-interacting. As organic molecules have multiple vibrational modes, it is common to approximate the multiple discrete modes by a single spectral density function, $J(\hbar\omega)$, where $\hbar\omega$ is the phonon energy. The spectral density function assumed in this exemplar is shown in Figure One, below. 
+While the Hamiltonian described in the previous section calculates the electronic eigenstates of the system, it neglects their coupling to the environment i.e., electron-phonon coupling. In organic crystals, the dominant phonon modes typically correspond to vibrations of the intermolecular bonds of the individual molecules in the lattice. Thus, each lattice site has its own set of independent phonon modes which we assume are non-interacting. As organic molecules have multiple vibrational modes, it is common to approximate the multiple discrete modes by a single spectral density function, $J(\hbar\omega)$, where $\hbar\omega$ refers to the phonon energy. The spectral density function used in this exemplar is shown in Figure One, below, and is defined mathematically in [Appendix Two](A2_SpectralDenistyFunctional). 
 
+For the purposes of this exemplar, we assume that the electron-phonon coupling is what drives transitions between the electronic eigenstates and that it sufficiently small that we can calculate the rates of these transitions using second order time-dependent perturbation theory. 
 
-For the purposes of this exemplar, we assume that the electron-phonon coupling is sufficiently small that we can treat it using second order perturbation theory. Thus, within our model, the electron-phonon coupling is what drives transistions between eigensates, as we discuss in greater detail in 
+<img src="assets/PTJw.png" alt="Alt Text" style="width:30%; height:auto;">
 
-
-$^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
+**Figure One**: The spectral density function used in this exemplar. The shaded region indicates the portion of the spectral density function which contributes to the outer reorganisation energy, a parameter which is used in the calculation of the excitons' decay rate if this is not assumed to be constant (see [Appendix One](A1_EnergyDependentRecombination.md)). 
