@@ -13,7 +13,7 @@ The electron-hole separation of the state is calculated as
 ```math
 r^{(\alpha)}= \langle\psi^{(\alpha)}||\vec{r}_{i} - \vec{r}_{j}||\psi^{(\alpha)}\rangle=\sum_{\mathrm{i\neq j}}|c_{\mathrm{ij}}^{(\alpha)}|^{2}|\vec{r}_{i} - \vec{r}_{j}|
 ```
-where $\vec{r}_{i}$ is the vector describing the position of the basis state $i$ in the lattice. Other eigenstate properties, such as the transition dipole moment, can be calculated as expectation values in a similar manner. 
+where $\vec{r}_{i}$ is the vector describing the position of the basis state $i$ in the lattice. Other eigenstate properties, such as their decay rates, can be calculated as expectation values in a similar manner. 
 
 The excitonic and charge transfer character of each eigenstate state can be evaluated using the contributions from excitonic $|k,k\rangle$ and charge transfer states $|i,j\rangle$ basis elements, respectively, using the expressions
 
