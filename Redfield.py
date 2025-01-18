@@ -50,12 +50,12 @@ def nw(w: NDArray[np.float32], kT: float) -> NDArray[np.float32]:
     Returns:
         n: The value of the Bose-Einstein occupation function for the input w and kT.
     """
-    if hasattr(w, "__len__") == 0:
+    if not hasattr(w, "__len__"):
         if w == 0:
             n = np.inf
         else:
             n = 1 / (np.exp(w / kT) - 1)
-    elif hasattr(w, "__len__") == 1:
+    elif hasattr(w, "__len__"):
         w[w == 0] = 1e-7
         n = 1 / (np.exp(w / kT) - 1)
     return n
