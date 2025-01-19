@@ -1,9 +1,9 @@
-"""Various plots to visualise the eigenstates of the lattice. 
-"""
-import numpy as np
+"""Various plots to visualise the eigenstates of the lattice."""
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
+
 
 def plot_energies(lattice_dict:dict, parameter_array:list[np.float32], 
                   labels:list[str], input_parameter:str, save:bool, 
@@ -46,7 +46,7 @@ def plot_energies(lattice_dict:dict, parameter_array:list[np.float32],
               title = input_parameter, title_fontsize = 14)
     
     if save:
-        plt.savefig(save_path + "Energy-vs-reh-Vary-{}.png".format(input_parameter), 
+        plt.savefig(save_path + f"Energy-vs-reh-Vary-{input_parameter}.png", 
                     bbox_inches="tight", dpi=300)
         
 def plot_state_distribution(L0,state_num:int,save:bool,sort_by_energy:bool=True, 

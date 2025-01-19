@@ -5,7 +5,9 @@ a user specified input parameter. It returns a dictionary containing the solutio
 """
 
 import numpy as np
+
 from Lattice import Lattice, Parameters
+
 
 def sweep_parameter(parameter_to_vary:str, parameter_array:list[np.float32],
                    parameter_dict:dict):
@@ -31,7 +33,6 @@ def sweep_parameter(parameter_to_vary:str, parameter_array:list[np.float32],
             i.e., the solution for the first value of the parameter being varied can be 
             accessed by calling L0_dict[0]. 
     """
-       
     lattice_dict = {}
     
     spacing = 10

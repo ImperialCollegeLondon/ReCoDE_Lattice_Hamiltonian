@@ -9,6 +9,7 @@ import scipy.constants as const
 import scipy.integrate as integrate
 from numpy.typing import NDArray
 
+
 def C_re_2D_array(
     w: NDArray[np.float32], lambda_total: float, e_peak: float, kT: float
 ) -> NDArray[np.float32]:
