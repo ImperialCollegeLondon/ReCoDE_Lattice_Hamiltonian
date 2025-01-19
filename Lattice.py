@@ -399,7 +399,6 @@ class Lattice:
             if params.const_recombination:
                 IPR.append(calc_IPR(evecs[:, i], basis, is_ex))
                 krec_ex.append(occupation_probability @ self.krec_vec_ex)
-            #
             else:
                 IPR.append(calc_IPR(evecs[:, i], basis, is_ex))
                 effective_coupling_ex = evecs[:, i] @ self.krec_vec_ex
@@ -430,7 +429,7 @@ class Lattice:
         # Make it so the states are numbered 1 to n, not 0 to n-1.
         states = states.sort_values(by=["energies"])
         states.insert(0, "state", np.arange(1, len(evals) + 1))
-        if params.const_recombination:
+        if not params.const_recombination:
             states = states.assign(v_effective_ex=v_eff_ex)
         if len(self.states) == 0:
             self.states = states
