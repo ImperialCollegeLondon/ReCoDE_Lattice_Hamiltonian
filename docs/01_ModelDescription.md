@@ -1,6 +1,6 @@
 # Introduction
 
-In this ReCoDe exemplar, we construct a Hamiltonian which describes the photoexcited state of an organic molecular crystal, such as rubrene. We then find the eigenstates of this Hamiltonian and their occupation under steady-state conditions. From this, we can calculate macroscopic properties of the crystal, such as its absorption spectra. In the Hamiltonian, we account for the following interactions between the excited states:
+In this ReCoDe exemplar, we use quantum mechanics to describe the photoexcited states of a molecular crystal and explore how the properties of these states, such as their energies, vary as we alter different input parameters. To do this, we model the system using a tight-binding Hamiltonian, the eigenstates of which correspond to the system's photoexcited states. In the Hamiltonian, we account for the following interactions between the excited states:
 * The electrostatic interaction between spatially separated electrons and holes.
 * The electronic coupling between molecules which allows electons and holes to move from one lattice site to an adjacent lattice site.
 * The energetic stabilisation of electrons and holes which are located on the same lattice site (i.e., exciton formation).
@@ -44,3 +44,13 @@ Putting these parts together, we can write the Hamiltonian describing the electr
 where basis states indexed with k are excitonic in character, while those indexed using i and j describe electron-hole pairs. The i index refers to the lattice site on which the electron is located and the j index to that on which the hole is localised. We then diagonalise this Hamiltonian to find the eigenstates and energy levels of the system.
 
 $^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
+
+## Coupling to the Environment
+
+While the Hamiltonian described in the previous section calculates the electronic eigenstates of the system, it neglects their coupling to the environment. As the crystal is at a non-zero temperature, the molecules making up the crystal will be in motion. Due to the relatively floppy nature of organic molecules, this thermal motion can cause their conformation (i.e., the arrangement of the atoms in each molecule) to fluctuate significantly. These fluctuations in the molecular conformations affect the energies of the (excited) electronic states and can drive transitions between them, as discussed in [Section Two](02_FindingSteadyStatePopulations.md).
+
+In organic crystals, the dominant thermally activated motions are typically vibrations of the intramolecular bonds of the individual molecules in the lattice (e.g., C=C or C-H bonds). Each distinct type of vibration for a given molecule is referred to as a 'mode'. The energies of these vibrational modes and the strength with which each molecule couples to them can be summarised by a single function called the spectral density function, $J(\hbar\omega)$. In this function, $\hbar\omega$ refers to the energy of the vibrational mode and the magnitude of $J$ is proportional to the strength of the coupling. The spectral density function used in this exemplar is shown in Figure One, below, and is defined mathematically in [Appendix Two](A2_SpectralDensityFunctional.md). 
+
+<img src="assets/PTJw.png" alt="Alt Text" style="width:30%; height:auto;">
+
+**Figure One**: The spectral density function used in this exemplar. The shaded region indicates the portion of the spectral density function which contributes to the outer reorganisation energy, a parameter which is used in the calculation of the excitons' decay rate if this is not assumed to be constant (see [Appendix One](A1_EnergyDependentRecombinationRates.md)). 
