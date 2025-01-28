@@ -57,33 +57,27 @@ def sweep_parameter(parameter_to_vary:str, parameter_array:list[np.float32],
     
         lattice = Lattice()
         if not parameter_dict["const_recombination"]:
-            lattice.generate_uniform(
-                size=size,
-                HOMO=0,
-                LUMO=1.8,
-                dist_sites=spacing,
-                min_dist_near_neighbour=num_sites_coupled * spacing + 0.01,
-                t0_homo=parameter_dict["t0"],
-                t0_lumo=parameter_dict["t0"],
-                d0=parameter_dict["d0"],
-                r0d=parameter_dict["r0d"] * spacing,
-                v_ex=parameter_dict["v_ex"],
-                const_recombination=False,
-            )
+            v_ex = parameter_dict["v_ex"]
+            krec_ex = 0
         else:
-            lattice.generate_uniform(
-                size=size,
-                HOMO=0,
-                LUMO=1.8,
-                dist_sites=spacing,
-                min_dist_near_neighbour=num_sites_coupled * spacing + 0.01,
-                t0_homo=parameter_dict["t0"],
-                t0_lumo=parameter_dict["t0"],
-                d0=parameter_dict["d0"],
-                r0d=parameter_dict["r0d"] * spacing,
-                krec_ex=parameter_dict["krec_ex"],
-                const_recombination=True,
-            )
+            v_ex = 0
+            krec_ex = parameter_dict["krec_ex"]
+            
+        lattice.generate_uniform(
+            size=size,
+            HOMO=0,
+            LUMO=1.8,
+            dist_sites=spacing,
+            min_dist_near_neighbour=num_sites_coupled * spacing + 0.01,
+            t0_homo=parameter_dict["t0"],
+            t0_lumo=parameter_dict["t0"],
+            d0=parameter_dict["d0"],
+            r0d=parameter_dict["r0d"] * spacing,
+            v_ex=v_ex,
+            krec_ex=krec_ex,
+            const_recombination=parameter_dict["const_recombination"],
+        )
+
     
         lattice.build_ham(
             params,
