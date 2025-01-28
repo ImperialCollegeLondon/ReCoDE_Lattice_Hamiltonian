@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "ReCoDe-Lattice-Hamiltonian"
+name = "ReCoDe_Lattice_Hamiltonian"
 version = "1.0"
 authors = [
     { name = "Lucy Hart", email = "lucy.hart18@imperial.ac.uk" },

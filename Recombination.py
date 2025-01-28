@@ -44,9 +44,15 @@ def laguerre(alpha: int, n: int, x: float) -> float:
         return L
 
 
-def FCWD_single_nm_v2(
-    n: int, m: int, lambda_inner: float, e_peak: float, lambda_outer: float, w: float,
-kT: float) -> float:
+def FCWD_single_mode(
+    n: int,
+    m: int,
+    lambda_inner: float,
+    e_peak: float,
+    lambda_outer: float,
+    w: float,
+    kT: float,
+) -> float:
     """Calculates decay rate from excited to ground state for given values of m and n.
 
     More specifically, this function calculates the decay rate from an excited state in
@@ -63,6 +69,8 @@ kT: float) -> float:
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
+        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
+            of 298 K)
 
     Returns:
         Float: The decay rate from an excited state in vibrational level m to the
@@ -103,6 +111,8 @@ def calc_FCWD_total(
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
+        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
+            of 298 K)
         N: The total number of vibronic modes to consider for the excited state. Default
             value is 20.
         M: The total number of vibronic modes to consider for the ground state. Defualt
@@ -114,14 +124,19 @@ def calc_FCWD_total(
     """
     FCWD_total = 0
     for n, m in product(range(N), range(M), repeat=1):
-        FCWD_total += FCWD_single_nm_v2(n, m, lambda_inner, e_peak, lambda_outer, w, kT)
+        FCWD_total += FCWD_single_mode(n, m, lambda_inner, e_peak, lambda_outer, w, kT)
     # Factor of 1/e to convert eV to joules
     return (1 / const.e) * (1 / np.sqrt(4 * np.pi * lambda_outer * kT)) * FCWD_total
 
 
 def decay_rate(
-    lambda_inner: float, e_peak: float, lambda_outer: float, w: float, v: float,
-kT:float = 0.0257) -> float:
+    lambda_inner: float,
+    e_peak: float,
+    lambda_outer: float,
+    w: float,
+    v: float,
+    kT: float = 0.0257,
+) -> float:
     """Calculates the decay rate of an excited state to the ground state.
 
     Args:
@@ -134,6 +149,8 @@ kT:float = 0.0257) -> float:
         w: The energy of the excited state, negelecting vibronic contributions.
         v: The The strength of the coupling between the ground state and the exciton
             state in eV.
+        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
+            of 298 K)
 
     Returns:
         Float:The rate at which the eigenstate with energy w and coupling v decays to
