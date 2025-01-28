@@ -3,8 +3,6 @@
 If const_recombination is set to False, the decay_rate function of this module is
 called by the states_from_ham function of the Lattice class in Lattice.py to calculate
 the decay rate of the eigenstates.
-
-To do: kT should be an argument and not hard coded into the functions.
 """
 
 from itertools import product
@@ -47,8 +45,8 @@ def laguerre(alpha: int, n: int, x: float) -> float:
 
 
 def FCWD_single_nm_v2(
-    n: int, m: int, lambda_inner: float, e_peak: float, lambda_outer: float, w: float
-) -> float:
+    n: int, m: int, lambda_inner: float, e_peak: float, lambda_outer: float, w: float,
+kT: float) -> float:
     """Calculates decay rate from excited to ground state for given values of m and n.
 
     More specifically, this function calculates the decay rate from an excited state in
@@ -70,7 +68,6 @@ def FCWD_single_nm_v2(
         Float: The decay rate from an excited state in vibrational level m to the
             ground state in vibrational level n.
     """
-    kT = 0.0257
     # Huang-Rhys factor
     S = lambda_inner / e_peak
     # Vibronic integral for any n,m
@@ -89,6 +86,7 @@ def calc_FCWD_total(
     e_peak: float,
     lambda_outer: float,
     w: float,
+    kT: float,
     N: int = 20,
     M: int = 6,
 ) -> float:
@@ -114,17 +112,16 @@ def calc_FCWD_total(
         Float: The total decay rate of an excited state to the ground state, summing
             over multiple vibronic modes.
     """
-    kT = 0.0257
     FCWD_total = 0
     for n, m in product(range(N), range(M), repeat=1):
-        FCWD_total += FCWD_single_nm_v2(n, m, lambda_inner, e_peak, lambda_outer, w)
+        FCWD_total += FCWD_single_nm_v2(n, m, lambda_inner, e_peak, lambda_outer, w, kT)
     # Factor of 1/e to convert eV to joules
     return (1 / const.e) * (1 / np.sqrt(4 * np.pi * lambda_outer * kT)) * FCWD_total
 
 
 def decay_rate(
-    lambda_inner: float, e_peak: float, lambda_outer: float, w: float, v: float
-) -> float:
+    lambda_inner: float, e_peak: float, lambda_outer: float, w: float, v: float,
+kT:float = 0.0257) -> float:
     """Calculates the decay rate of an excited state to the ground state.
 
     Args:
@@ -144,5 +141,5 @@ def decay_rate(
     """
     # Convert v into joules
     v *= const.e
-    FCWD_0 = calc_FCWD_total(lambda_inner, e_peak, lambda_outer, w)
+    FCWD_0 = calc_FCWD_total(lambda_inner, e_peak, lambda_outer, w, kT)
     return (2 * np.pi * v**2 * FCWD_0) / const.hbar

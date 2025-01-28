@@ -74,7 +74,7 @@ def plot_state_distribution(L0,state_num:int,save:bool,sort_by_energy:bool=True,
     if not sort_by_energy:
         #Sort states in order of reh from low to high
         States = States.sort_values(by=['dis_eh']).reset_index(drop=True)
-    elif sort_by_energy:
+    else:
         #Sort states in order of energy from low to high
         States = States.sort_values(by=['energies']).reset_index(drop=True)
     num_states = len(L0.basis)

@@ -35,6 +35,25 @@ def sweep_parameter(parameter_to_vary:str, parameter_array:list[np.float32],
     """
     lattice_dict = {}
     
+    valid_parameters = {"size": [2, 10],
+                        "j0": [1, 3],
+                        "r0j": [0.01, 1],
+                        "v_ex": [1e-3, 0.1],
+                        "krec_ex": [1e8, 1e11],
+                        "t0": [1e-3, 50e-3],
+                        "d0": [1e-3, 50e-3],
+                        "r0d": [0.01, 1],
+                        "disorder_site_ene": [0, 100e-3],
+                        "e_singlet": [0.5, 1.75]}
+    
+    bounds = valid_parameters[parameter_to_vary]
+    for par in parameter_array:
+        if par > bounds[1] or par < bounds[0]:
+            raise ValueError('{0} is not a physical value of the parameter {1}. Please \
+                             choose a value in the range {2} to {3}.'.format(par, 
+                             parameter_to_vary, bounds[0], bounds[1]))
+                        
+    
     spacing = 10
     num_sites_coupled = 1.45
     size = parameter_dict["size"]
