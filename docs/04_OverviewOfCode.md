@@ -1,6 +1,19 @@
 # Summary
 
-<img src="assets/Codeoverview.png" alt="Alt Text" style="width:90%; height:auto;">
+<img src="assets/CodeOverview.png" alt="Alt Text" style="width:80%; height:auto;">
 
 The structure of the code is illustrated in the above schematic. The core of the code is the `Lattice` class in the `lattice.py` file. This class contains all the subfunctions needed to construct the Hamiltonian (`generate_uniform` and `build_ham`), find its eigenstates ('states_from_ham') and calculate their steady-state populations ('get_rates_mat' and 'solve_steady'). The functions `states_from_ham` and `get_rates_mat` call on helper functions from the files `Recombination.py` and `Redfield.py`, respectively, though `Recombination.py` is only used if `const_recombination` is set to `False` (see [Section Three](CalculatingEigenstateProperties.md)). 
-In addition to the `Lattice` class, the `lattice.py` file also contains the `Parameter` and `Site` dataclasses. The former contains the values of global variables, such as temperature, which are used in all the other functions and the latter contains the properties of each individual site in the lattice and is called by the `generate_uniform` function. 
+
+In addition to the `Lattice` class, the `lattice.py` file also contains the `Parameter` and `Site` dataclasses. The former contains the values of global variables, such as temperature, which are used in all the other functions and the latter contains the properties of each individual site in the lattice and is called by the `generate_uniform` function. These sites are then used to define the basis set in which the Hamiltonian is built by the `build_ham` function. 
+
+To see an example of how the lattice class can be instantiated and used, refer to the `RunLattice.py` file. If you would like to try running the code, you can use the `WorkedExample.ipynb` file to see how changing the electronic coupling affects the energies and distributions of the system's eigenstates. 
+
+# Code in Detail
+
+In this section, we will look at three sections of the code in greater detail to explain the rationale behind why certain packages or techniques were used. 
+
+## Speeding up `for` loops: the `get_rates` function
+
+## Using seaborn to make heatmaps: the `plot_state_distribution` function
+
+## Faster parameter sweeps: using `multiprocessing` to run `for` loops in parallel
