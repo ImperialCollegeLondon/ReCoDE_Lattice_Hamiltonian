@@ -44,7 +44,8 @@ def sweep_parameter(parameter_to_vary:str, parameter_array:list[np.float32],
                         "d0": [1e-3, 50e-3],
                         "r0d": [0.01, 1],
                         "disorder_site_ene": [0, 100e-3],
-                        "e_singlet": [0.5, 1.75]}
+                        "e_singlet": [0.5, 1.75],
+                        "F": [0, 20e-3]}
     
     bounds = valid_parameters[parameter_to_vary]
     for par in parameter_array:
@@ -100,7 +101,7 @@ def sweep_parameter(parameter_to_vary:str, parameter_array:list[np.float32],
     
         lattice.build_ham(
             params,
-            F=parameter_dict["F"],
+            F=[0,parameter_dict["F"],0],
             min_dist_near_neighbour=(num_sites_coupled * spacing) + 0.01,
             disorder_site_ene=parameter_dict["disorder_site_ene"],
             random_seed=42,
