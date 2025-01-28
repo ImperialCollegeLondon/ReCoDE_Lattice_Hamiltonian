@@ -15,7 +15,7 @@ In this section, we will describe how these rates are calculated within this exe
 # Generation Rates
 To calculate the generation rate into a given eigenstate, we assign a generation probability to excitonic basis states, which is determined by the `transition_dipole_ex` parameter ($G_{\mathrm{ex}}$). 
 
-$G_{\alpha} =  \sum_{k}G_{\mathrm{ex}}|c_{kk}^{\alpha}|^{2}$  
+$G_{\alpha} =  \sum_{k}G_{\mathrm{ex}}|c_{kk}^{(\alpha)}|^{2}$  
 
 where the summation over $k$ evaulates the contribution to the eigenstate from excitonic basis states, $|k,k\rangle$. This can be thought of as a way of characterising how much of the eigenstate is made up from excitonic basis states. A value close to one implies that the eigenstate is an exciton, while a value close to zero indicates that the eigenstate has charge transfer character. 
 
@@ -23,10 +23,23 @@ where the summation over $k$ evaulates the contribution to the eigenstate from e
 
 In our exemplar, the recombination of eigenstates to the ground state is assumed to be dominated by non-radiative recombination. We model this in one of two ways, depending upon the value of the `const_recombination` argument of the `Parameters` class. If this is set to True, a recombination rate is assigned to excitonic basis states using the `krec_ex` parameter. Then, the total recomination rate of the eigenstate $\alpha$ is calculated as 
 
-$k_{rec}^{\alpha} =  \sum_{k}k_{\mathrm{rec,ex}}|c_{kk}^{\alpha}|^{2}$ 
+$k_{rec}^{\alpha} =  \sum_{k}k_{\mathrm{rec,ex}}|c_{kk}^{(\alpha)}|^{2}$ 
 
 Alternatively, if the `const_recombination` argument of the `Parameters` class is set to False, the decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules. This is described in further detail in [Appendix One](A1_EnergyDependentRecombinationRates.md). 
 
 # Rates of Population Transfer
 
+The rates of population transfer, $k_{\alpha \beta}$, are calculated using secular Redfield theory. While the derivation of these rates is mathematically involved (see e.g., ref 1), the equation used to calculate them can be written in a relatively simple form
+
+```math
+k_{\alpha \beta}(\omega_{\alpha \beta}) = \left[ \sum_{k}|c_{kk}^{(\alpha)}|^{2}|c_{kk}^{(\beta)}|^{2} + \sum_{i\neq j}|c_{ij}^{(\alpha)}|^{2}|c_{ij}^{(\beta)}|^{2} + \sum_{j\neq i}|c_{ij}^{(\alpha)}|^{2}|c_{ij}^{(\beta)}|^{2} \right] C(\omega_{\alpha \beta})
+```
+where the function $C(\omega)$ is called the correlation function and is defined in terms of the Bose-Einstein occupation function, $n(\omega)$, and the spectral density function, $J(\omega)$, as follows
+
+$C(\omega) = 2\pi \omega^2 \left( 1 + n(\omega)\right)\left(J(\omega) - J(-\omega)\right)$
+
+Note that, for each value of $k_{\alpha \beta}$, you must sum over all basis states. For a $N \times N$ square lattice, the total number of eigenstates is $\mathcal{O}(N^4)$ and so the number of rates which must be calculated is $\mathcal{O}(N^8)$. Consequaently, the calculation of the $k_{\alpha \beta}$ is typically the most time consuming step of the simulation. 
+
+# References
+1) Dynamics of Isolated and Open Quantum Systems in *Charge and Energy Transfer Dynamics in Molecular Systems* pg 67–190 (John Wiley & Sons, Ltd, 2011). doi:10.1002/9783527633791.ch3.
 
