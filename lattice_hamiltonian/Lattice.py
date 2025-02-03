@@ -18,7 +18,7 @@ from scipy import linalg
 from scipy.sparse import csr_array
 
 from lattice_hamiltonian.Recomination import Recombination 
-import lattice_hamiltonian.Redfiled import Redfield 
+import lattice_hamiltonian.Redfield import Redfield 
 
 
 @dataclass
