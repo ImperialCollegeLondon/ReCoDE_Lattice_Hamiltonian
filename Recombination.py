@@ -3,8 +3,6 @@
 If const_recombination is set to False, the decay_rate function of this module is
 called by the states_from_ham function of the Lattice class in Lattice.py to calculate
 the decay rate of the eigenstates.
-
-To do: kT should be an argument and not hard coded into the functions.
 """
 
 from itertools import product
@@ -46,8 +44,14 @@ def laguerre(alpha: int, n: int, x: float) -> float:
         return L
 
 
-def FCWD_single_nm_v2(
-    n: int, m: int, lambda_inner: float, e_peak: float, lambda_outer: float, w: float
+def FCWD_single_mode(
+    n: int,
+    m: int,
+    lambda_inner: float,
+    e_peak: float,
+    lambda_outer: float,
+    w: float,
+    kT: float,
 ) -> float:
     """Calculates decay rate from excited to ground state for given values of m and n.
 
@@ -65,12 +69,13 @@ def FCWD_single_nm_v2(
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
+        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
+            of 298 K)
 
     Returns:
         Float: The decay rate from an excited state in vibrational level m to the
             ground state in vibrational level n.
     """
-    kT = 0.0257
     # Huang-Rhys factor
     S = lambda_inner / e_peak
     # Vibronic integral for any n,m
@@ -89,6 +94,7 @@ def calc_FCWD_total(
     e_peak: float,
     lambda_outer: float,
     w: float,
+    kT: float,
     N: int = 20,
     M: int = 6,
 ) -> float:
@@ -105,6 +111,8 @@ def calc_FCWD_total(
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
+        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
+            of 298 K)
         N: The total number of vibronic modes to consider for the excited state. Default
             value is 20.
         M: The total number of vibronic modes to consider for the ground state. Defualt
@@ -114,16 +122,20 @@ def calc_FCWD_total(
         Float: The total decay rate of an excited state to the ground state, summing
             over multiple vibronic modes.
     """
-    kT = 0.0257
     FCWD_total = 0
     for n, m in product(range(N), range(M), repeat=1):
-        FCWD_total += FCWD_single_nm_v2(n, m, lambda_inner, e_peak, lambda_outer, w)
+        FCWD_total += FCWD_single_mode(n, m, lambda_inner, e_peak, lambda_outer, w, kT)
     # Factor of 1/e to convert eV to joules
     return (1 / const.e) * (1 / np.sqrt(4 * np.pi * lambda_outer * kT)) * FCWD_total
 
 
 def decay_rate(
-    lambda_inner: float, e_peak: float, lambda_outer: float, w: float, v: float
+    lambda_inner: float,
+    e_peak: float,
+    lambda_outer: float,
+    w: float,
+    v: float,
+    kT: float = 0.0257,
 ) -> float:
     """Calculates the decay rate of an excited state to the ground state.
 
@@ -137,6 +149,8 @@ def decay_rate(
         w: The energy of the excited state, negelecting vibronic contributions.
         v: The The strength of the coupling between the ground state and the exciton
             state in eV.
+        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
+            of 298 K)
 
     Returns:
         Float:The rate at which the eigenstate with energy w and coupling v decays to
@@ -144,5 +158,5 @@ def decay_rate(
     """
     # Convert v into joules
     v *= const.e
-    FCWD_0 = calc_FCWD_total(lambda_inner, e_peak, lambda_outer, w)
+    FCWD_0 = calc_FCWD_total(lambda_inner, e_peak, lambda_outer, w, kT)
     return (2 * np.pi * v**2 * FCWD_0) / const.hbar
