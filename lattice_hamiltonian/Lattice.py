@@ -17,7 +17,7 @@ import scipy.constants as sp
 from scipy import linalg
 from scipy.sparse import csr_array
 
-from lattice_hamiltonian.Recomination import Recombination 
+from lattice_hamiltonian.Recombination import Recombination 
 import lattice_hamiltonian.Redfield import Redfield 
 
 
