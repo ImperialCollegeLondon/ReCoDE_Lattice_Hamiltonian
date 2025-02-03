@@ -45,7 +45,7 @@ def plot_energies(
             zorder=len(parameter_array) - i,
         )
 
-    ax.set_xlabel("r$_{e-h}$ ($\AA$)", fontsize=16)
+    ax.set_xlabel(r"r$_{e-h}$ ($\AA$)", fontsize=16)
     ax.set_ylabel("Energy (eV)", fontsize=16)
     ax.tick_params(axis="both", direction="in", top=True, right=True, labelsize=14)
     ax.legend(
