@@ -10,10 +10,10 @@ import scipy.integrate as integrate
 from numpy.typing import NDArray
 
 
-def C_re_2D_array(
+def correlation_function_real_part(
     w: NDArray[np.float32], lambda_total: float, e_peak: float, kT: float
 ) -> NDArray[np.float32]:
-    """The correlation function of the lattice.
+    """Calculates the real part of the correlation function of the lattice.
 
     Args:
         w: A numpy array containing the energy differences between all the eigenstates
@@ -30,16 +30,16 @@ def C_re_2D_array(
             function evaluted at every energy contained in w.
     """
     C_w = (
-        (1 + nw(w, kT))
+        (1 + bose_einstein_occupancy(w, kT))
         * (
-            (J_Renger(w, lambda_total, e_peak))
-            - (J_Renger(-w, lambda_total, e_peak))
+            (spectral_density(w, lambda_total, e_peak))
+            - (spectral_density(-w, lambda_total, e_peak))
         )
     ) / (const.hbar / const.e)
     return 2 * np.pi * C_w
 
 
-def nw(w: NDArray[np.float32], kT: float) -> NDArray[np.float32]:
+def bose_einstein_occupancy(w: NDArray[np.float32], kT: float) -> NDArray[np.float32]:
     """Bose-Einstein occupancy function.
 
     Args:
@@ -61,7 +61,7 @@ def nw(w: NDArray[np.float32], kT: float) -> NDArray[np.float32]:
     return n
 
 
-def J_Renger(
+def spectral_density(
     w: NDArray[np.float32],
     lambda_total: float,
     e_peak: float,
@@ -90,7 +90,7 @@ def J_Renger(
     return J_w
 
 
-def norm_J_Renger(lambda_total: float, e_peak: float, n: int = 15) -> float:
+def norm_spectral_density(lambda_total: float, e_peak: float, n: int = 15) -> float:
     """Ensures that the spectral density function is correctly normalised.
 
     Args:
