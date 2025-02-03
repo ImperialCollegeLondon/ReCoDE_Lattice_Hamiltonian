@@ -406,7 +406,7 @@ class Lattice:
                 effective_inner_lambda_ex = lambda_inner * (1 / IPR[i][0])
                 effective_outer_lambda_ex = lambda_outer * (1 / IPR[i][0])
                 krec_ex.append(
-                    Recombination.decay_rate(
+                    recombination.decay_rate(
                         effective_inner_lambda_ex,
                         params.e_peak,
                         effective_outer_lambda_ex,
@@ -451,7 +451,7 @@ class Lattice:
             lambda_outer,
             lambda_inner,
         ) = params.lambda_outer, params.lambda_inner
-        lambda_inner = Redfield.norm_J_Renger(lambda_outer + lambda_inner, e_peak)
+        lambda_inner = redfield.norm_spectral_density(lambda_outer + lambda_inner, e_peak)
         energies = np.array(self.states.energies)
         num_states = len(energies)
         occupation_prob = np.array(
@@ -464,7 +464,7 @@ class Lattice:
             [energies[inds[0][k]] - energies[inds[1][k]] for k in range(len_inds)],
             dtype=np.float32,
         )
-        C = Redfield.C_re_2D_array(w, lambda_inner, e_peak, kT)
+        C = redfield.correlation_function_real_part(w, lambda_inner, e_peak, kT)
         # Here I pick the kth element from inds[0], which gives the row index, and the
         # kth element from inds[1], which gives the column index. This corresponds to a
         # transition between the inds[0][k] and inds[1][k] eigenstates.
