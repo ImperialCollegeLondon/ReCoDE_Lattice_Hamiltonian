@@ -451,7 +451,9 @@ class Lattice:
             lambda_outer,
             lambda_inner,
         ) = params.lambda_outer, params.lambda_inner
-        lambda_inner = redfield.norm_spectral_density(lambda_outer + lambda_inner, e_peak)
+        lambda_inner = redfield.norm_spectral_density(
+            lambda_outer + lambda_inner, e_peak
+        )
         energies = np.array(self.states.energies)
         num_states = len(energies)
         occupation_prob = np.array(

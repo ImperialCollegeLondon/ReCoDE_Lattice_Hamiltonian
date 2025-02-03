@@ -124,9 +124,13 @@ def calc_decay_rate_all_vibronic_modes(
     """
     vib_overlap_total = 0
     for n, m in product(range(N), range(M), repeat=1):
-        vib_overlap_total += calc_decay_rate_single_vibronic_mode(n, m, lambda_inner, e_peak, lambda_outer, w, kT)
+        vib_overlap_total += calc_decay_rate_single_vibronic_mode(
+            n, m, lambda_inner, e_peak, lambda_outer, w, kT
+        )
     # Factor of 1/e to convert eV to joules
-    return (1 / const.e) * (1 / np.sqrt(4 * np.pi * lambda_outer * kT)) * vib_overlap_total
+    return (
+        (1 / const.e) * (1 / np.sqrt(4 * np.pi * lambda_outer * kT)) * vib_overlap_total
+    )
 
 
 def decay_rate(
@@ -158,5 +162,7 @@ def decay_rate(
     """
     # Convert v into joules
     v *= const.e
-    vib_overlap_0 = calc_decay_rate_all_vibronic_modes(lambda_inner, e_peak, lambda_outer, w, kT)
+    vib_overlap_0 = calc_decay_rate_all_vibronic_modes(
+        lambda_inner, e_peak, lambda_outer, w, kT
+    )
     return (2 * np.pi * v**2 * vib_overlap_0) / const.hbar
