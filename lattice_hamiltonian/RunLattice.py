@@ -6,7 +6,7 @@ a user specified input parameter. It returns a dictionary containing the solutio
 
 import numpy as np
 
-from Lattice import Lattice, Parameters
+from lattice_hamiltonian.Lattice import Lattice, Parameters
 
 
 def sweep_parameter(
