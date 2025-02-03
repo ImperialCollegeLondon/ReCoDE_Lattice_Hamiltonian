@@ -32,8 +32,8 @@ def C_re_2D_array(
     C_w = (
         (1 + nw(w, kT))
         * (
-            (J_Renger(w, lambda_total, e_peak, kT=kT))
-            - (J_Renger(-w, lambda_total, e_peak, kT=kT))
+            (J_Renger(w, lambda_total, e_peak))
+            - (J_Renger(-w, lambda_total, e_peak))
         )
     ) / (const.hbar / const.e)
     return 2 * np.pi * C_w
@@ -65,7 +65,6 @@ def J_Renger(
     w: NDArray[np.float32],
     lambda_total: float,
     e_peak: float,
-    kT: float = 0.0257,
     n: int = 15,
 ) -> NDArray[np.float32]:
     """The spectral density function of the molecules' phonon modes.
@@ -78,7 +77,6 @@ def J_Renger(
             Units are eV.
         e_peak: The energy of the peak of the spectral density function in eV.
             Typically 0.16 eV for organic molecules.
-        kT: The typical thermal energy of the lattice in eV.
         n: Parameter determining how rapidly the spectral denisty function decays for
             w > e_peak. Default values is 15.
 
