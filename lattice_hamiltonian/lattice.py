@@ -336,7 +336,7 @@ class Lattice:
                         + np.dot(dist_vec, F)
                     )
                 counter += 1
-                basis.append([elec_pos.id, hol_pos.id])
+                basis.append((elec_pos.id, hol_pos.id))
 
         # Calculate the off diagonal elements of the Hamiltonian.
         # using combinations so will never have case where ii = jj
