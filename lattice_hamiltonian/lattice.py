@@ -155,7 +155,7 @@ class Lattice:
         self.is_ex: list[int]
         """A list of 1s and 0s indicating if a given basis state is excitonic or not. 
         This information is used in the calc_IPR function."""
-        self.states: pd.DataFrame()
+        self.states: pd.DataFrame
         """A dataframe containing useful information about the system's eigenstates."""
         self.rates_mat: NDArray[np.float32]
         """A 2D matrix containing the rates of transitions between the eigenstates as 
