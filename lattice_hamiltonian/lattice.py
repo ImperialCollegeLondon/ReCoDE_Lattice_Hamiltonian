@@ -133,7 +133,7 @@ class Lattice:
         (False)."""
         self.ham: csr_array
         """The Hamiltionian of the system, which is stored as a sparse matrix."""
-        self.basis: list
+        self.basis: list[tuple[int, int]]
         """The basis elements of the system. Each element of basis is a two element 
         list where the first number indicates the lattice site on which the electron is 
         located and the second number indicates the lattice site on which the hole is 
