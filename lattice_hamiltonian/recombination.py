@@ -69,8 +69,7 @@ def calc_decay_rate_single_vibronic_mode(
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
-        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
-            of 298 K)
+        kT: The avaialable thermal energy in eV.
 
     Returns:
         Float: The decay rate from an excited state in vibrational level m to the
@@ -111,8 +110,7 @@ def calc_decay_rate_all_vibronic_modes(
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
-        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
-            of 298 K)
+        kT: The avaialable thermal energy in eV. 
         N: The total number of vibronic modes to consider for the excited state. Default
             value is 20.
         M: The total number of vibronic modes to consider for the ground state. Defualt
@@ -139,7 +137,7 @@ def decay_rate(
     lambda_outer: float,
     w: float,
     v: float,
-    kT: float = 0.0257,
+    kT: float,
 ) -> float:
     """Calculates the decay rate of an excited state to the ground state.
 
@@ -153,8 +151,7 @@ def decay_rate(
         w: The energy of the excited state, negelecting vibronic contributions.
         v: The The strength of the coupling between the ground state and the exciton
             state in eV.
-        kT: The avaialable thermal energy in eV (0.0257 eV cooresponds to a temperature
-            of 298 K)
+        kT: The avaialable thermal energy in eV.
 
     Returns:
         Float:The rate at which the eigenstate with energy w and coupling v decays to
