@@ -124,7 +124,7 @@ class Lattice:
         of the simulation (e.g., the states DataFrame contains information about the 
         eigenstates of the system).
         """
-        self.sites = []
+        self.sites: list[Site] = []
         """A list containing instances of the Site class which will be populated by the 
         generate_uniform function and contain information about the lattice sites"""
         self.const_recombination: bool
