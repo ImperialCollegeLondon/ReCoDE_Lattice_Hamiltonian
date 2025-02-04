@@ -387,6 +387,7 @@ class Lattice:
         krec_ex = []
         is_ex = np.array(self.is_ex)
         basis = np.array(self.basis)
+        kT = params.kT
         if not params.const_recombination:
             v_eff_ex = []
         for i in range(len(evals)):
@@ -412,6 +413,7 @@ class Lattice:
                         effective_outer_lambda_ex,
                         evals[i],
                         effective_coupling_ex,
+                        kT
                     )
                 )
 
