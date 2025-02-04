@@ -58,3 +58,6 @@ lint.pydocstyle.convention = "google"
 # Some of the docs scripts give errors, but we don't care
 exclude = "docs"
 ignore_missing_imports = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["lattice_hamiltonian"]
