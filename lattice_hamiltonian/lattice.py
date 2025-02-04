@@ -138,21 +138,21 @@ class Lattice:
         list where the first number indicates the lattice site on which the electron is 
         located and the second number indicates the lattice site on which the hole is 
         located."""
-        self.transdip_vec_ex: list
+        self.transdip_vec_ex: list[float]
         """A list containing the transition dipole of each basis state. This is used to 
         calculate the transition dipole of the eigenstates and thus the rate at which 
         they are generated."""
-        self.krec_vec_ex: list
+        self.krec_vec_ex: list[float]
         """A list containing either the recombination rate of each basis state 
         (if const_recombination = True) ot the value of the coupling stregth between 
         the basis state and the ground state (if const_recombination = False). This is 
         used to calculate the recombination rate of the eigenstates and thus the
         rate at which they decay."""
-        self.dist_he: list
+        self.dist_he: list[float]
         """A list containing the electron-hole separation of each eigenstate. This is 
         used to calculate the expectation value of the electron-hole separation of the 
         eigenstates"""
-        self.is_ex: list
+        self.is_ex: list[int]
         """A list of 1s and 0s indicating if a given basis state is excitonic or not. 
         This information is used in the calc_IPR function."""
         self.states: pd.DataFrame()
