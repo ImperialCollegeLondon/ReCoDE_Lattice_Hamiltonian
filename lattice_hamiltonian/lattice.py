@@ -14,6 +14,7 @@ from itertools import combinations, product
 import numpy as np
 import pandas as pd
 import scipy.constants as sp
+from numpy.typing import NDArray
 from scipy import linalg
 from scipy.sparse import csr_array
 
@@ -114,13 +115,51 @@ class Lattice:
     """Class used to constuct the system's Hamiltonian and find its properties."""
 
     def __init__(self) -> None:
-        """Declare empty lists of sites and states.
+        """Declare the attributes of the Lattice class.
 
-        The sites and states lists will be populated by the generate_uniform and
-        build_ham functions, respectively.
+        Assign attributes to the lattice class which either contain information about
+        the system that needs to be passed from one function to another (e.g., to build 
+        the Hamiltonian, you need to know what the properties of the sites are as these 
+        make up your basis set) or which contain information which is a desired output 
+        of the simulation (e.g., the states DataFrame contains information about the 
+        eigenstates of the system).
         """
         self.sites = []
-        self.states = []
+        """A list containing instances of the Site class which will be populated by the 
+        generate_uniform function and contain information about the lattice sites"""
+        self.const_recombination: bool
+        """A switch which determines whether recombination rates are treated as a 
+        constant (True) or are calculated using generalised Marcus-Levich-Jortner 
+        (False)."""
+        self.ham: csr_array
+        """The Hamiltionian of the system, which is stored as a sparse matrix."""
+        self.basis: list
+        """The basis elements of the system. Each element of basis is a two element 
+        list where the first number indicates the lattice site on which the electron is 
+        located and the second number indicates the lattice site on which the hole is 
+        located."""
+        self.transdip_vec_ex: list
+        """A list containing the transition dipole of each basis state. This is used to 
+        calculate the transition dipole of the eigenstates and thus the rate at which 
+        they are generated."""
+        self.krec_vec_ex: list
+        """A list containing either the recombination rate of each basis state 
+        (if const_recombination = True) ot the value of the coupling stregth between 
+        the basis state and the ground state (if const_recombination = False). This is 
+        used to calculate the recombination rate of the eigenstates and thus the
+        rate at which they decay."""
+        self.dist_he: list
+        """A list containing the electron-hole separation of each eigenstate. This is 
+        used to calculate the expectation value of the electron-hole separation of the 
+        eigenstates"""
+        self.is_ex: list
+        """A list of 1s and 0s indicating if a given basis state is excitonic or not. 
+        This information is used in the calc_IPR function."""
+        self.states: pd.DataFrame()
+        """A dataframe containing useful information about the system's eigenstates."""
+        self.rates_mat: NDArray[np.float32]
+        """A 2D matrix containing the rates of transitions between the eigenstates as 
+        calculated in the get_rate_mat function."""
 
     def generate_uniform(
         self,
@@ -169,8 +208,6 @@ class Lattice:
         counter_id = 0
         self.const_recombination = const_recombination
 
-        site_vec = np.zeros((size**2, 3))
-
         for x, y in product(range(size), repeat=2):
             # The 1 here is the transition dipole of the exciton.
             if const_recombination:
@@ -197,9 +234,7 @@ class Lattice:
                         v_ex=v_ex,
                     )
                 )
-            site_vec[counter_id, :] = np.array([x * dist_sites, y * dist_sites, 0])
             counter_id = counter_id + 1
-        self.site_vec = site_vec
         for ii, jj in combinations(range(counter_id), 2):
             # Find distance from site ii to site jj.
             distance_bet_sites = math.dist(
