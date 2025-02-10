@@ -57,9 +57,9 @@ def sweep_parameter(
                 f"{par} is not a physical value of the parameter {parameter_to_vary}.\
                 \nPlease choose a value in the range {bounds[0]} to {bounds[1]}."
             )
-    
+
     for key in parameter_dict:
-        if key != 'const_recombination':
+        if key != "const_recombination":
             par = parameter_dict[key]
             bounds = valid_parameters[key]
             if par > bounds[1] or par < bounds[0]:
@@ -129,19 +129,20 @@ def sweep_parameter(
 
     return lattice_dict
 
+
 def single_parameter(parameter_dict: dict):
     """A function to solve the Hamiltonian for the inputs given in parameter_dict.
 
     Args:
-        parameter_dict: A dictionary containing the values of all the parameters. This 
+        parameter_dict: A dictionary containing the values of all the parameters. This
             should contain values for each of the parameters: size, j0,
             r0j, e_singlet, const_recombination, krec_ex, v_ex, d0, r0d, t0,
             disorder_site_ene and F.
 
     Returns:
-        L0: A instance of the lattice class for which the eigenstates and their 
-            occupations have been calculated based upon the parameter values given in 
-            parameter_dict. 
+        L0: A instance of the lattice class for which the eigenstates and their
+            occupations have been calculated based upon the parameter values given in
+            parameter_dict.
     """
 
     valid_parameters = {
@@ -159,7 +160,7 @@ def single_parameter(parameter_dict: dict):
     }
 
     for key in parameter_dict:
-        if key != 'const_recombination':
+        if key != "const_recombination":
             par = parameter_dict[key]
             bounds = valid_parameters[key]
             if par > bounds[1] or par < bounds[0]:
