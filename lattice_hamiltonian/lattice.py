@@ -118,10 +118,10 @@ class Lattice:
         """Declare the attributes of the Lattice class.
 
         Assign attributes to the lattice class which either contain information about
-        the system that needs to be passed from one function to another (e.g., to build 
-        the Hamiltonian, you need to know what the properties of the sites are as these 
-        make up your basis set) or which contain information which is a desired output 
-        of the simulation (e.g., the states DataFrame contains information about the 
+        the system that needs to be passed from one function to another (e.g., to build
+        the Hamiltonian, you need to know what the properties of the sites are as these
+        make up your basis set) or which contain information which is a desired output
+        of the simulation (e.g., the states DataFrame contains information about the
         eigenstates of the system).
         """
         self.sites: list[Site] = []
@@ -293,13 +293,13 @@ class Lattice:
         data = []
         basis = []
         const_recombination = self.const_recombination
+        e_singlet = params.e_singlet
         if random_seed != 0:
             np.random.seed(seed=random_seed)
         # Create empty lists to store the values of various quantities of interest.
         transdip_vec_ex = []
         krec_vec_ex = []
         dist_he = []
-        e_singlet = params.e_singlet
         is_ex = []
         counter = 0
         for elec_pos in self.sites:
@@ -448,7 +448,7 @@ class Lattice:
                         effective_outer_lambda_ex,
                         evals[i],
                         effective_coupling_ex,
-                        kT
+                        kT,
                     )
                 )
 
@@ -468,7 +468,7 @@ class Lattice:
         states.insert(0, "state", np.arange(1, len(evals) + 1))
         if not params.const_recombination:
             states = states.assign(v_effective_ex=v_eff_ex)
-        if len(self.states) == 0:
+        if not hasattr(self, "states"):
             self.states = states
         else:
             # adding newly calculated values onto the pre-existing states dataframe

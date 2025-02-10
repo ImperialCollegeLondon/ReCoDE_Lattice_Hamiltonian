@@ -142,5 +142,7 @@ def plot_state_distribution(
     axes[1].set_xlabel("Hole", fontsize=20)
 
     if save:
-        name = "state_distribution_{}_eV.png".format(States["energies"].iloc[state_num])
-        plt.savefig(save_path + name, bbox_inches="tight", dpi=300)
+        name = save_path + "state_distribution_{:.0f}_meV.png".format(
+            1e3 * States["energies"].iloc[state_num]
+        )
+        plt.savefig(name, bbox_inches="tight", dpi=300)

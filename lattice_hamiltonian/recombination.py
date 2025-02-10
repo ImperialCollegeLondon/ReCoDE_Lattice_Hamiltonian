@@ -110,7 +110,7 @@ def calc_decay_rate_all_vibronic_modes(
         lambda_outer: The outer reorganisation energy of each molecule in the lattice.
             Units are eV.
         w: The energy of the excited state, negelecting vibronic contributions.
-        kT: The avaialable thermal energy in eV. 
+        kT: The avaialable thermal energy in eV.
         N: The total number of vibronic modes to consider for the excited state. Default
             value is 20.
         M: The total number of vibronic modes to consider for the ground state. Defualt
