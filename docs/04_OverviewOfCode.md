@@ -6,5 +6,5 @@ The structure of the ```lattice_hamiltonian``` module is illustrated in the abov
 
 In addition to the `Lattice` class, the `lattice.py` file also contains the `Parameter` and `Site` dataclasses. The former contains the values of global variables, such as temperature, which are used in all the other functions and the latter contains the properties of each individual site in the lattice and is called by the `generate_uniform` method. These sites are then used to define the basis set in which the Hamiltonian is built by the `build_ham` method. 
 
-
+To see an example of how the lattice class can be instantiated and used, refer to the `RunLattice.py` file. If you would like to try running the code, you can use the `WorkedExample.ipynb` file to see how changing the electronic coupling affects the energies and distributions of the system's eigenstates. 
 
