@@ -8,5 +8,8 @@ We start by going over the relevant section of the ```plot_state_distribution`` 
 
 <img src="assets/seaborn_code.png" alt="Alt Text" style="width:100%; height:auto;">
 
-
+We will now look at some of the arguemnts more closely, and you can find out more using the [documentation](https://seaborn.pydata.org/generated/seaborn.heatmap.html). The arguments which were particularly useful to make this plot look visually appealing were:
+\item ```robust```
+\item ```ax```
+\item ```square```
 
