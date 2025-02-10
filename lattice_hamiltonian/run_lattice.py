@@ -144,7 +144,6 @@ def single_parameter(parameter_dict: dict):
             occupations have been calculated based upon the parameter values given in
             parameter_dict.
     """
-
     valid_parameters = {
         "size": [2, 10],
         "j0": [1, 3],
