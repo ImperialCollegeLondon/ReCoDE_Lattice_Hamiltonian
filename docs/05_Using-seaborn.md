@@ -1,6 +1,6 @@
 # Using ```seaborn``` to make heatmaps
 
-Here, we will look at the ```plot_state_distribution``` in the ```lattice_plots.py``` file. The purpose of this function is to plot how the electron and hole probability densities are distributed across the lattice. This is useful as it allows you to visualise how delocalised the eigenstates are across the lattice. To see how this function can be used, work through the ```WorkedExample``` jupyter notebook and we show an example of its output below:
+Here, we will look at the ```plot_state_distribution``` function in the ```lattice_plots.py``` file. The purpose of this function is to plot how the electron and hole probability densities are distributed across the lattice. This is useful as it allows you to visualise how delocalised the eigenstates are across the lattice. To see how this function can be used, work through the ```WorkedExample``` jupyter notebook and we show an example of its output below:
 
 <img src="assets/state_distribution_1783_meV.png" alt="Alt Text" style="width:50%; height:auto;">
 
