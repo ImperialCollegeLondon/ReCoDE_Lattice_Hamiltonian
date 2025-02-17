@@ -6,7 +6,7 @@ Here, we will look at the ```plot_state_distribution``` function in the ```latti
 
 A heatmap provides a convenient way to represent the electron and hole probability distributions for a 2D lattice. Although it is possible to make a heatmap using ```matplotlib```, the ```seaborn``` package provides an alternative method and the plots generated tend to look nicer for less effort than those obtained using ```matplotlib```. Consequently, we will discuss the ```seaborn``` package here. 
 
-We start by going over the relevant section of the ```plot_state_distribution``` function and annotating what each part of the code is doing:
+We start by exploring how the `plot_state_distribution` function works under the hood using `seaborn`. The following snippet shows a summary of the code, annotating what each part is doing:
 
 <img src="assets/seaborn_code.png" alt="Alt Text" style="width:100%; height:auto;">
 
