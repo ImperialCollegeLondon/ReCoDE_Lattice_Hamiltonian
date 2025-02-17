@@ -5,6 +5,7 @@ called by the states_from_ham function of the Lattice class in Lattice.py to cal
 the decay rate of the eigenstates.
 """
 
+import math
 from itertools import product
 
 import numpy as np
@@ -78,7 +79,7 @@ def calc_decay_rate_single_vibronic_mode(
     # Huang-Rhys factor
     S = lambda_inner / e_peak
     # Vibronic integral for any n,m
-    prefactor = np.exp(-S) * S ** (n - m) * np.math.factorial(m) / np.math.factorial(n)
+    prefactor = np.exp(-S) * S ** (n - m) * math.factorial(m) / math.factorial(n)
     lag = laguerre(n - m, m, S)
     activation = np.exp(
         -((w - (n - m) * e_peak - lambda_outer) ** 2) / (4 * lambda_outer * kT)
