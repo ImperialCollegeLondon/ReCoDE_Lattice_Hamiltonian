@@ -27,14 +27,14 @@ def check_valid_parameters(parameter_dict: dict) -> None:
         "r0d": [0.01, 1],
         "disorder_site_ene": [0, 100e-3],
         "e_singlet": [0.5, 3],
-        "F": [0, 20e-3],
+        "F": [0, 10e-3],
         "temp": [10, 400],
         "e_peak": [0.1, 0.2],
         "lambda_inner": [0.01, 0.5],
         "lambda_outer": [0.01, 0.5],
         "HOMO": [0, 1],
         "LUMO": [0.5, 3],
-        "spacing": [1, 15],
+        "spacing": [1, 10],
         "num_sites_coupled": [1, 3],
     }
 

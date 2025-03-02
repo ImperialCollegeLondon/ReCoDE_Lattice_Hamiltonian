@@ -488,7 +488,7 @@ class Lattice:
             lambda_outer,
             lambda_inner,
         ) = params.lambda_outer, params.lambda_inner
-        lambda_inner = redfield.norm_spectral_density(
+        lambda_total = redfield.norm_spectral_density(
             lambda_outer + lambda_inner, e_peak
         )
         energies = np.array(self.states.energies)
@@ -506,7 +506,7 @@ class Lattice:
             dtype=np.float32,
             count=len_inds,
         )
-        C = redfield.correlation_function_real_part(w, lambda_inner, e_peak, kT)
+        C = redfield.correlation_function_real_part(w, lambda_total, e_peak, kT)
         # Here I pick the kth element from inds[0], which gives the row index, and the
         # kth element from inds[1], which gives the column index. This corresponds to a
         # transition between the inds[0][k] and inds[1][k] eigenstates.
