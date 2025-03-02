@@ -66,7 +66,8 @@ def check_parameter_dict(parameter_dict: dict) -> dict:
 
     Args:
         parameter_dict: A dictionary containing the values of the parameters which are
-            to be used in the simulation.
+            to be used in the simulation. If values are not provided for some parameters,
+            the dictionary will be modifed so that those parameters take on default values. 
     """
     default_parameters = {
         "size": 6,
