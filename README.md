@@ -2,21 +2,15 @@
 
 ## Description
 
-In this project, we use a simplified model of an organic crystal to caluclate the systems' excited states under illumination and their populations. We then investigate how changing the input parameters of the model change the nature of the excited states.
+In this project, we use a simplified model of an organic crystal to caluclate the systems' excited states under illumination and their populations. We then investigate how changing the input parameters of the model change the nature of the excited states. An example is shown in the GIF below where we demonstrate how applying an electric field changes the energies and populations of the eigenstates. 
+
+<img src="https://github.com/ImperialCollegeLondon/ReCoDE_Lattice_Hamiltonian/blob/42-write-readme-file/docs/assets/ReCoDe.gif" alt="Gif" style="width:50%; height:auto;">
 
 ## Learning Outcomes
 
 - Techniques to speed up ```for``` loops
 - How to run ```for``` loops in parallel uing the ```multiprocessing``` package
 - How to plot heatmaps using the ```seaborn``` package
-
-<!-- How long should they spend reading and practising using your Code.
-Provide your best estimate -->
-
-| Task       | Time    |
-| ---------- | ------- |
-| Reading    | 3 hours |
-| Practising | 3 hours |
 
 ## Requirements
 
@@ -30,9 +24,9 @@ If there is an existing exemplar in the ReCoDE repositories link to that.
 -->
 
 ### Academic
-- Strong, undergraduate-level understanding of quantum mechanics
-- Basic familiarity with solid state physics
 - Intermediate-level python ability
+- Strong, undergraduate-level understanding of quantum mechanics (recommended)
+- Basic familiarity with solid state physics (recommended)
 
 ### System
 - See the [pyproject.toml](pyproject.toml) file
@@ -43,30 +37,7 @@ Start by reading through sections 1-4 which describe the physics underlying this
 
 Once you have been through this, you can work through the next four sections. In the first of these, we walk you through how to use the code and investigate how the eigenstates of the system change when we change the strength of the coupling between lattice sites. The next three sections focus in detail on short extracts from the code which are relevant to the learning outcomes of this exemplar. 
 
-## Project Structure
-
-```log
-.
-├── docs
-│   ├── 01_ModelDescription.md
-│   ├── 02_FindingSteadyStatePopulations.md
-│   ├── 03_CalculatingEigenstateProperties.md
-│   ├── 04_OverviewOdCode.md
-│   ├── 06_SpeedingUp-for-Loops.md
-│   ├── 08_Using-seaborn.md
-│   └── ...
-├── lattice_hamiltonian
-|   ├── lattice.py
-|   ├── lattice_plots.py
-|   ├── recombination.py
-|   ├── redfield.py
-│   └── run_lattice.py
-├── notebooks
-|   ├── plots
-|   ├── 05_WorkedExample.ipynb
-│   └── 07_Using-multiprocessing.ipynb
-└── ...
-```
+There are lots of things which the code can be used to do that aren't explicitly covered here! If you want a challenge, try to figure our how you could receate the GIF shown above. What changes about the electrn-hole separation of the states with the highest occupation as the electric field strength is increased?
 
 <!-- Change this to your License. Make sure you have added the file on GitHub -->
 
