@@ -49,9 +49,7 @@ def check_valid_parameters(parameter_dict: dict) -> None:
                 f"Please choose a value in the range {bounds[0]} to {bounds[1]}."
             )
 
-    if parameter_dict["HOMO"] >= (
-        parameter_dict["LUMO"] or parameter_dict["e_singlet"]
-    ):
+    if parameter_dict["HOMO"] >= parameter_dict["LUMO"] or parameter_dict["HOMO"] >=  parameter_dict["e_singlet"]:
         raise ValueError(
             "The HOMO energy must be less than e_singlet and the LUMO energy."
         )
