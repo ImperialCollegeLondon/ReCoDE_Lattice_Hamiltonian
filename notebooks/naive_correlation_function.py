@@ -7,6 +7,7 @@ Marcus and Renger 2002 & Quantum biology revisited 2020.
 import numpy as np
 import scipy.constants as const
 
+
 def correlation_function_real_part_single(
     w: float, lambda_total: float, e_peak: float, kT: float
 ) -> float:
