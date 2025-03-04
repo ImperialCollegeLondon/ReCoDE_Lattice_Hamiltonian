@@ -86,6 +86,7 @@ def spectral_density(
     """
     a = e_peak / (3 / n) ** (1 / n)
     J_w = lambda_total * w**3 * np.exp((-w / a) ** n)
+    J_w = np.asarray(J_w)
     J_w[w < 0] = 0
     return J_w
 

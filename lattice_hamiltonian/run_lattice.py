@@ -27,14 +27,14 @@ def check_valid_parameters(parameter_dict: dict) -> None:
         "r0d": [0.01, 1],
         "disorder_site_ene": [0, 100e-3],
         "e_singlet": [0.5, 3],
-        "F": [0, 20e-3],
+        "F": [0, 10e-3],
         "temp": [10, 400],
         "e_peak": [0.1, 0.2],
         "lambda_inner": [0.01, 0.5],
         "lambda_outer": [0.01, 0.5],
         "HOMO": [0, 1],
         "LUMO": [0.5, 3],
-        "spacing": [1, 15],
+        "spacing": [1, 10],
         "num_sites_coupled": [1, 3],
     }
 
@@ -45,12 +45,12 @@ def check_valid_parameters(parameter_dict: dict) -> None:
         bounds = valid_parameters[key]
         if not bounds[0] <= par <= bounds[1]:
             raise ValueError(
-                f"{par} is not a physical value of the parameter {key}."
+                f"{par} is not a physical value of the parameter {key}. "
                 f"Please choose a value in the range {bounds[0]} to {bounds[1]}."
             )
 
-    if parameter_dict["HOMO"] >= (
-        parameter_dict["LUMO"] or parameter_dict["e_singlet"]
+    if (parameter_dict["HOMO"] >= parameter_dict["LUMO"]) or (
+        parameter_dict["HOMO"] >= parameter_dict["e_singlet"]
     ):
         raise ValueError(
             "The HOMO energy must be less than e_singlet and the LUMO energy."
@@ -68,7 +68,9 @@ def check_parameter_dict(parameter_dict: dict) -> dict:
 
     Args:
         parameter_dict: A dictionary containing the values of the parameters which are
-            to be used in the simulation.
+            to be used in the simulation. If values are not provided for some 
+            parameters, the dictionary will be modifed so that those parameters take on 
+            default values.
     """
     default_parameters = {
         "size": 6,
@@ -92,9 +94,7 @@ def check_parameter_dict(parameter_dict: dict) -> dict:
         "num_sites_coupled": 1.45,
         "const_recombination": 0,
     }
-    for key in default_parameters.keys():
-        if key not in parameter_dict.keys():
-            parameter_dict[key] = default_parameters[key]
+    parameter_dict = default_parameters | parameter_dict
     return parameter_dict
 
 

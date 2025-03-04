@@ -587,30 +587,35 @@ class Lattice:
             lambda_outer,
             lambda_inner,
         ) = params.lambda_outer, params.lambda_inner
-        lambda_inner = redfield.norm_spectral_density(
+        lambda_total = redfield.norm_spectral_density(
             lambda_outer + lambda_inner, e_peak
         )
         energies = np.array(self.states.energies)
         num_states = len(energies)
-        occupation_prob = np.array(
-            [self.states.occupation_probability[i] for i in range(num_states)]
+        num_basis = len(self.basis)
+        occupation_prob = np.fromiter(
+            (self.states.occupation_probability[i] for i in range(num_states)),
+            dtype=np.dtype((float, num_basis)),
         )
         rates_mat = np.zeros((num_states, num_states), dtype=np.float32)
         inds = np.tril_indices_from(rates_mat, k=-1)
         len_inds = int(((num_states) * (num_states - 1)) / 2)
-        w = np.array(
-            [energies[inds[0][k]] - energies[inds[1][k]] for k in range(len_inds)],
+        w = np.fromiter(
+            (energies[inds[0][k]] - energies[inds[1][k]] for k in range(len_inds)),
             dtype=np.float32,
+            count=len_inds,
         )
-        C = redfield.correlation_function_real_part(w, lambda_inner, e_peak, kT)
+        C = redfield.correlation_function_real_part(w, lambda_total, e_peak, kT)
         # Here I pick the kth element from inds[0], which gives the row index, and the
         # kth element from inds[1], which gives the column index. This corresponds to a
         # transition between the inds[0][k] and inds[1][k] eigenstates.
-        gamma_Cw_real_tot = np.array(
-            [
+        gamma_Cw_real_tot = np.fromiter(
+            (
                 occupation_prob[inds[0][k]] @ occupation_prob[inds[1][k]] * C[k]
                 for k in range(len_inds)
-            ]
+            ),
+            dtype=float,
+            count=len_inds,
         )
         rates_mat[inds] = gamma_Cw_real_tot
         rates_mat[(inds[1], inds[0])] = rates_mat[inds] * np.exp(-w / params.kT)
