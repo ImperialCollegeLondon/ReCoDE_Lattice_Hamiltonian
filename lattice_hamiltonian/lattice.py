@@ -459,7 +459,7 @@ class Lattice:
         self.dist_he = dist_he
         self.is_ex = is_ex
 
-    def solve_hamiltonian(self, params, max_energy_diff: float) -> None:
+    def states_from_ham(self, params, max_energy_diff: float) -> None:
         """Find the eigenstates of the Hamiltonian and calculate their properties.
 
         The Hamiltonian is solved using the scipy.linalg.eigh function which finds the
