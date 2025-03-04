@@ -45,12 +45,12 @@ def check_valid_parameters(parameter_dict: dict) -> None:
         bounds = valid_parameters[key]
         if not bounds[0] <= par <= bounds[1]:
             raise ValueError(
-                f"{par} is not a physical value of the parameter {key}."
+                f"{par} is not a physical value of the parameter {key}. "
                 f"Please choose a value in the range {bounds[0]} to {bounds[1]}."
             )
 
-    if parameter_dict["HOMO"] >= (
-        parameter_dict["LUMO"] or parameter_dict["e_singlet"]
+    if (parameter_dict["HOMO"] >= parameter_dict["LUMO"]) or (
+        parameter_dict["HOMO"] >= parameter_dict["e_singlet"]
     ):
         raise ValueError(
             "The HOMO energy must be less than e_singlet and the LUMO energy."
@@ -68,7 +68,9 @@ def check_parameter_dict(parameter_dict: dict) -> dict:
 
     Args:
         parameter_dict: A dictionary containing the values of the parameters which are
-            to be used in the simulation.
+            to be used in the simulation. If values are not provided for some 
+            parameters, the dictionary will be modifed so that those parameters take on 
+            default values.
     """
     default_parameters = {
         "size": 6,
@@ -92,9 +94,7 @@ def check_parameter_dict(parameter_dict: dict) -> dict:
         "num_sites_coupled": 1.45,
         "const_recombination": 0,
     }
-    for key in default_parameters.keys():
-        if key not in parameter_dict.keys():
-            parameter_dict[key] = default_parameters[key]
+    parameter_dict = default_parameters | parameter_dict
     return parameter_dict
 
 
