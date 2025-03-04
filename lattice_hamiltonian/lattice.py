@@ -178,6 +178,9 @@ class Lattice:
     ) -> None:
         """Build the lattice and assign properties to lattice sites.
 
+        The sites are initiated by calling the create_sites function. couplings between
+        sites are then calculated using the couple_sites function.
+
         Args:
             size: Determines the total number of lattice sites. The lattice will be a
                 size x size square.
@@ -205,9 +208,45 @@ class Lattice:
             v_ex: Coupling of excitons to the ground state. Defaults to zero, but must
                 be non-zero if const_recombination = False. Units are eV.
         """
-        counter_id = 0
         self.const_recombination = const_recombination
+        self.create_sites(
+            size, HOMO, LUMO, dist_sites, const_recombination, krec_ex, v_ex
+        )
+        self.couple_sites(
+            dist_sites, min_dist_near_neighbour, t0_homo, t0_lumo, d0, r0d
+        )
 
+    def create_sites(
+        self,
+        size: int,
+        HOMO: float,
+        LUMO: float,
+        dist_sites: float,
+        const_recombination: bool,
+        krec_ex: float,
+        v_ex: float,
+    ) -> None:
+        """Creates a list containing the lattice sites.
+
+        Each element of the list is an instance of the site class and contains the
+        location of the lattice site, its HOMO and LUMO enegies, parameters relevant to
+        the rate of recombination and an ID number.
+
+        Args:
+            size: Determines the total number of lattice sites. The lattice will be a
+                size x size square.
+            HOMO: Energy of the material's highest occupied molecular orbital in eV.
+            LUMO: Energy of the material's lowest unoccupied molecular orbital in eV.
+            dist_sites: The separation between adjacent lattice sites. Units are
+                angstom.
+            const_recombination: A switch which determines whether recombination rates
+                are treated as a constant (True) or are calculated using generalised
+                Marcus-Levich-Jortner (False).
+            krec_ex: Rate at which excitons decay to the ground state. Must be non-zero
+                if const_recombination = True. Units are inverse seconds.
+            v_ex: Coupling of excitons to the ground state. Must be non-zero if
+                const_recombination = False. Units are eV.
+        """
         for x, y in product(range(size), repeat=2):
             # The 1 here is the transition dipole of the exciton.
             if const_recombination:
@@ -216,7 +255,7 @@ class Lattice:
                         np.array([x * dist_sites, y * dist_sites, 0]),
                         HOMO,
                         LUMO,
-                        counter_id,
+                        len(self.sites),
                         const_recombination,
                         1,
                         krec_ex=krec_ex,
@@ -228,14 +267,46 @@ class Lattice:
                         np.array([x * dist_sites, y * dist_sites, 0]),
                         HOMO,
                         LUMO,
-                        counter_id,
+                        len(self.sites),
                         const_recombination,
                         1,
                         v_ex=v_ex,
                     )
                 )
-            counter_id = counter_id + 1
-        for ii, jj in combinations(range(counter_id), 2):
+
+    def couple_sites(
+        self,
+        dist_sites: float,
+        min_dist_near_neighbour: float,
+        t0_homo: float,
+        t0_lumo: float,
+        d0: float,
+        r0d: float,
+    ) -> None:
+        """Create off-diagonal couplings between lattice sites.
+
+        This function identifies all the lattice sites which are coupled to one another
+        and calculates the size of the relevant couplings. Only directly adjacent sites
+        have an electronic coupling to one another, while the maximum distance over
+        which couplings between excitons are considered is determined by the
+        min_dist_near_neighbour parameter.
+
+        Args:
+            dist_sites: The separation between adjacent lattice sites. Units are
+                angstom.
+            min_dist_near_neighbour: The maximum separtion between two lattice sites
+                for which excitonic coupling is considered to be non-zero. Units are
+                angstrom.
+            t0_homo: The electronic coupling between the HOMOs of two adjacent lattice
+                sites. Units are eV.
+            t0_lumo: The electronic coupling between the LUMOs of two adjacent lattice
+                sites. Units are eV.
+            d0: Parameter determining the strength of the dipole-dipole coupling
+                between excitons. Units are eV.
+            r0d: Parameter determining the strength of the dipole-dipole coupling
+                between excitons. Units are eV.
+        """
+        for ii, jj in combinations(range(len(self.sites)), 2):
             # Find distance from site ii to site jj.
             distance_bet_sites = math.dist(
                 self.sites[ii].coordinate, self.sites[jj].coordinate
@@ -391,9 +462,11 @@ class Lattice:
     def states_from_ham(self, params, max_energy_diff: float) -> None:
         """Find the eigenstates of the Hamiltonian and calculate their properties.
 
-        If const_recombination = False, decay rates are found using generalised Marcus-
-        Levich-Jortner following Taylor and Kassal 2018 and D'Avino et al. J. Phys.
-        Chem. Lett. 2016, 7, 536-540.
+        The Hamiltonian is solved using the scipy.linalg.eigh function which finds the
+        eigenvalues and eigenstates of the Hamiltonian.
+
+        Properties of the eigenstates are calculated by the calculate_state_properties
+        function. These properties are then added to a 'states' DataFrame.
 
         Args:
             params: An instance of the parameters class.
@@ -401,10 +474,6 @@ class Lattice:
                 which are analysed. Eigenstates with an energy greater than that of the
                 lowest energy eigenstate plus max_energy_diff are discarded.
         """
-        lambda_inner, lambda_outer = (
-            params.lambda_inner,
-            params.lambda_outer,
-        )
         evals, evecs = linalg.eigh(self.ham.toarray())
         evals = np.real(evals)
         evecs = np.real(evecs)
@@ -412,67 +481,97 @@ class Lattice:
         evecs = evecs[:, evals < evals.min() + max_energy_diff]
         # remove eigenvalues corresponding to states above the energy cut off.
         evals = evals[evals < evals.min() + max_energy_diff]
-        # Declare a empty lists which will be populated by the function.
-        list_evecs = []
-        dis_st = []
-        IPR = []
-        ex_char = []
-        transdip_ex = []
-        occupation_prob = []
-        krec_ex = []
+        # Declare empty lists which will be populated by the function.
         is_ex = np.array(self.is_ex)
         basis = np.array(self.basis)
-        kT = params.kT
-        if not params.const_recombination:
-            v_eff_ex = []
+        states_: list[dict] = []
         for i in range(len(evals)):
-            list_evecs.append(evecs[:, i])
-            occupation_probability = evecs[:, i] ** 2
-            occupation_prob.append(occupation_probability)
-            dis_st.append(occupation_probability @ self.dist_he)
-            transdip_ex.append(occupation_probability @ self.transdip_vec_ex)
-            ex_char.append(occupation_probability @ is_ex)
-            if params.const_recombination:
-                IPR.append(calc_IPR(evecs[:, i], basis, is_ex))
-                krec_ex.append(occupation_probability @ self.krec_vec_ex)
-            else:
-                IPR.append(calc_IPR(evecs[:, i], basis, is_ex))
-                effective_coupling_ex = evecs[:, i] @ self.krec_vec_ex
-                v_eff_ex.append(effective_coupling_ex)
-                effective_inner_lambda_ex = lambda_inner * (1 / IPR[i][0])
-                effective_outer_lambda_ex = lambda_outer * (1 / IPR[i][0])
-                krec_ex.append(
-                    recombination.decay_rate(
-                        effective_inner_lambda_ex,
-                        params.e_peak,
-                        effective_outer_lambda_ex,
-                        evals[i],
-                        effective_coupling_ex,
-                        kT,
-                    )
+            states_.append(
+                self.calculate_state_properties(
+                    evals[i],
+                    evecs[:, i],
+                    is_ex,
+                    basis,
+                    params,
+                    params.const_recombination,
                 )
+            )
 
-        states = pd.DataFrame(
-            {
-                "energies": evals,
-                "dis_eh": dis_st,
-                "IPR": IPR,
-                "ex_char": ex_char,
-                "transdip_ex": transdip_ex,
-                "krec_ex": krec_ex,
-                "occupation_probability": occupation_prob,
-            }
-        )
+        states = pd.DataFrame(states_)
         # Make it so the states are numbered 1 to n, not 0 to n-1.
         states = states.sort_values(by=["energies"])
         states.insert(0, "state", np.arange(1, len(evals) + 1))
-        if not params.const_recombination:
-            states = states.assign(v_effective_ex=v_eff_ex)
         if not hasattr(self, "states"):
             self.states = states
         else:
             # adding newly calculated values onto the pre-existing states dataframe
             self.states = pd.concat([self.states, states], ignore_index=True)
+
+    def calculate_state_properties(
+        self,
+        energy: float,
+        evec: NDArray[np.float32],
+        is_ex: NDArray[int],
+        basis: NDArray[tuple],
+        params,
+        const_recombination: bool,
+    ) -> dict:
+        """Calculate the properties of a given eigenstate.
+
+        The properties which we calculate are: the occupation probability, the
+        expectation value of the electron-hole separation, the inverse participation
+        ratio (IPR), the 'exciton character', the transition dipole moment and the decay
+        rate.
+
+        If const_recombination = False, decay rates are found using generalised Marcus-
+        Levich-Jortner following Taylor and Kassal 2018 and D'Avino et al. J. Phys.
+        Chem. Lett. 2016, 7, 536-540.
+
+        Args:
+            energy: The energy of the eigenstate.
+            evec: The eigenvector of the eigenstate as expressed in the basis set made
+                up of the lattice sites.
+            is_ex: A list of 1s and 0s which indicate whether the corresponding basis
+                set element is an excitonic state (1) or not (0).
+            basis: A list of tuples, each of which indicates an element of the basis
+                set. Each tuple takes the form (electron position, hole position) where
+                the position is given by the ID of the lattice site on which the
+                electron/hole is located. If the electron and hole are located on the
+                same lattice site, the basis state eleent has exciton character.
+            params: An instance of the parameters class.
+            const_recombination: A switch which determines whether recombination rates
+                are treated as a constant (True) or are calculated using generalised
+                Marcus-Levich-Jortner (False).
+        """
+        state_properties = {}
+        occupation_prob = evec**2
+        state_properties["energies"] = energy
+        state_properties["dis_eh"] = occupation_prob @ self.dist_he
+        IPR = calc_IPR(evec, basis, is_ex)
+        state_properties["IPR"] = IPR
+        state_properties["ex_char"] = occupation_prob @ is_ex
+        state_properties["transdip_ex"] = occupation_prob @ self.transdip_vec_ex
+        if const_recombination:
+            state_properties["krec_ex"] = occupation_prob @ self.krec_vec_ex
+        else:
+            lambda_inner, lambda_outer = (
+                params.lambda_inner,
+                params.lambda_outer,
+            )
+            effective_coupling_ex = evec @ self.krec_vec_ex
+            state_properties["v_effective_ex"] = effective_coupling_ex
+            effective_inner_lambda_ex = lambda_inner * (1 / IPR[0])
+            effective_outer_lambda_ex = lambda_outer * (1 / IPR[0])
+            state_properties["krec_ex"] = recombination.decay_rate(
+                effective_inner_lambda_ex,
+                params.e_peak,
+                effective_outer_lambda_ex,
+                energy,
+                effective_coupling_ex,
+                params.kT,
+            )
+        state_properties["occupation_probability"] = occupation_prob
+        return state_properties
 
     def get_rate_mat(self, params) -> None:
         """Calculate rates of population transfer between eigenstates.
@@ -542,7 +641,7 @@ class Lattice:
 
 
 def calc_IPR(
-    eigvec: list[float], basis: list[float], is_ex: list[float]
+    eigvec: NDArray[np.float32], basis: list[tuple], is_ex: list[float]
 ) -> list[float]:
     """Calculate the inverse participation ratio of the eigenstates.
 
@@ -550,10 +649,15 @@ def calc_IPR(
     2016, 7, 536-540.
 
     Args:
-        eigvec: List of the eigenvectors of the system.
-        basis: List of the system's basis states.
-        is_ex: List identifying which elements of basis correspond to excitonic
-            states.
+        eigvec: The eigenvector of the eigenstate as expressed in the basis set made
+            up of the lattice sites.
+        basis: A list of tuples, each of which indicates an element of the basis
+            set. Each tuple takes the form (electron position, hole position) where
+            the position is given by the ID of the lattice site on which the
+            electron/hole is located. If the electron and hole are located on the
+            same lattice site, the basis state eleent has exciton character.
+        is_ex: A list of 1s and 0s which indicate whether the corresponding basis
+            set element is an excitonic state (1) or not (0).
 
     Returns:
         list[float]: List containing the inverse participation ratio (IPR) of the
