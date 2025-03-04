@@ -165,7 +165,7 @@ def single_parameter(parameter_dict: dict, max_energy_diff: float = 1.5):
     )
 
     # calculate the eigenstates of the lattice
-    lattice.solve_hamiltonian(params, max_energy_diff=max_energy_diff)
+    lattice.states_from_ham(params, max_energy_diff=max_energy_diff)
     # calculate the rates of transitions between states
     lattice.get_rate_mat(params)
     # solve for steady state population of the different states
