@@ -1,6 +1,6 @@
 # Calculation of Recombination Rates Using Generalised Marcus-Levich-Jortner
 
-If the `const_recombination` argument of the `Parameters` class is set to False, the eigenstate's decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3):
+If the `const_recombination` argument of the `Parameters` class is set to False, the eigenstate's decay rates are calculated using a version of Fermi's Golden Rule which has been adapted to describe organic molecules (the model is called generalised Marcus-Levich-Jortner and further detail can be found in references 1-3). In this framework, the decay rates are given by:
 
 $k_{rec}^{\alpha} = \frac{2\pi}{\hbar} |V^{\alpha}|^2 FCWD^{\alpha}(\hbar\omega=0)$
 
@@ -8,7 +8,7 @@ where $FCWD$ refers to the Franck-Condon weighted density of states, which descr
 
 $FCWD(0)=\frac{1}{\sqrt{4\pi\lambda_{l}kT}} \sum_(w=0)^{\infty}\sum_{t=0}^{\infty}\frac{e^{-S}S^{w-t} t!}{w!}\left[L_{t}^{w-t}(S)\right]^2 e^\left(-[E+\lambda_{l}+(w-t)\hbar\Omega]^2/4 \lambda_{l}kT\right)\frac{e^{-t\hbar\Omega⁄kT}}{Z_{\hbar\Omega}}$
 
-for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the reorganisation energy associated with the spectral density function described in the file [01_ModelDescription](01_ModelDescription.md) by defining $\lambda_{\mathrm{total}} = \lambda_{l} + \lambda_{h}$ and $\hbar\Omega$ is given by the value of the e_peak parameter. 
+for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the properties of the system's spectral density function, which was described in the file [Introduction](01_ModelDescription.md), as follows: the total reorgansition energy of the spectral density function is the sum of $\lambda_{l}$and $\lambda_{h}$ and $\hbar\Omega$ is given by the value of the spectral density's e_peak parameter. 
 
 <img src="assets/Franck_Condon_Diagram.png" alt="Alt Text" style="width:30%; height:auto;">
 
@@ -24,7 +24,7 @@ $V_{\mathrm{ex}} = \sum_{kk}c_{kk}^{\alpha}V_{\mathrm{ex}}$
 
 where $V_{\mathrm{ex}}$ is the coupling of excitonic basis elements. 
 
-Additionally, the model takes into account the fact that delocalised excited states typically have longer lifetimes than more locailised ones. To do this, the reorganisation energies are reduced by a factor of the inverse participation ratio assoicated with the relevant state ($\mathrm{IPR}$, see description in [03_CalculatingEigenstateProperties](03_CalculatingEigenstateProperties.md)) :
+Additionally, the model takes into account the fact that delocalised excited states typically have longer lifetimes than more locailised ones. To do this, the reorganisation energies are reduced by a factor of the inverse participation ratio assoicated with the relevant state ($\mathrm{IPR}$, see description in the file [CalculatingEigenstateProperties](03_CalculatingEigenstateProperties.md)) :
 
 $\lambda_{\mathrm{x,ex}}^{\alpha}= \frac{\lambda_{\mathrm{x,ex}}}{\mathrm{IPR_{ex}}}$
 
