@@ -8,7 +8,7 @@ as is described in greater detail [here](02_FindingSteadyStatePopulations.md). L
 
 ## 1) Vectorize functions
 
-Vectorizing functions is always a good first step to speed up python code. Simply put, a vectorized function is one which can perform an operation on multiple elements of an input array at once, rather than having to act on each element in turn. Many common opeartors in Python are already vectorized. For example, consider the following exponentiation:
+Vectorizing functions is always a good first step to speed up python code. Simply put, a vectorized function is one which can perform an operation on multiple elements of an input array at once, rather than having to act on each element in turn. Many common operators in Python are already vectorized. For example, consider the following exponentiation:
 ```
 x = np.linspace(0,100,101)
 y = np.zeros(len(x))
