@@ -17,7 +17,7 @@ To calculate the generation rate into a given eigenstate, we assign a generation
 
 $G_{\alpha} =  \sum_{k}G_{\mathrm{ex}}|c_{kk}^{(\alpha)}|^{2}$  
 
-where the summation over $k$ evaulates the contribution to the eigenstate from excitonic basis states, $|k,k\rangle$. This can be thought of as a way of characterising how much of the eigenstate is made up from excitonic basis states. A value close to one implies that the eigenstate is an exciton, while a value close to zero indicates that the eigenstate has charge transfer character. 
+where the summation over $k$ evaulates the contribution to the eigenstate from excitonic basis states, $|k,k\rangle$. This can be thought of as a way of characterising how much of the eigenstate is made up from excitonic basis states. A value close to one implies that the eigenstate is an exciton, while a value close to zero indicates that the eigenstate has charge transfer character (i.e., the electron and hole are on different molecules). 
 
 # Recombination Rates
 
