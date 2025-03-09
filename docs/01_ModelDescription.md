@@ -9,7 +9,7 @@ In this ReCoDe exemplar, we use quantum mechanics to describe the photoexcited s
 Below, we describe the construction of the Hamiltonian in greater detail and we explain how we include each of these interactions. 
 
 ## Constructing the Hamiltonian 
-To model the system, we consider a 2D lattice in which each site represents a molecule. When a molecule is photoexcited, one electron will move from the highest occupied molecular orbital (HOMO) to the lowest unoccupied molecular orbital (LUMO). Due to the low dielectric constant of organic materials, the resulting electron-hole pair will form a tightly bound state called a Frenkel exciton. This excitonic state is energetically stabilised relative to two free charges in the same material, meaning that its energy is lower than the bandgap of the material by an amount termed the exciton binding energy. For the electron and hole to spatially seperate from one another and become free charges, they must overcome this binding energy. Typically, this is not a spontaneous process and requires, for example, the applicaiton of an electric field. 
+To model the system, we consider a 2D lattice in which each site represents a molecule. When a molecule is photoexcited, one electron will move from the highest occupied molecular orbital (HOMO) to the lowest unoccupied molecular orbital (LUMO). Due to the low dielectric constant of organic materials, the resulting electron-hole pair will form a tightly bound state called a Frenkel exciton. This excitonic state is energetically stabilised relative to two free charges in the same material, meaning that its energy is lower than the bandgap of the material by an amount termed the exciton binding energy. For the electron and hole to spatially separate from one another and become free charges, they must overcome this binding energy. Typically, this is not a spontaneous process and requires, for example, the applicaiton of an electric field. 
 
 To account for the different properties of the system's exctied states, our model contains two types of basis state: excitons, when the electron and hole occupy the same lattice site and electron-hole pairs, when the electron and hole are located on different lattice sites. The energy of excitonic states, $E_{\mathrm{ex}}$, is given by 
 
@@ -19,7 +19,7 @@ In which $E_{\mathrm{LUMO}}$ and $E_{\mathrm{HOMO}}$ and the energy levels of th
 
 $E(|\vec{r}|)=E_{\mathrm{LUMO}}-E_{\mathrm{HOMO}}-\frac{J_{0}}{1-|\vec{r}|/r_{\mathrm{0,j}}}$
 
-where $\vec{r}$ is the vector connecting the electron-hole pair, and the second term represents the electrostatic attraction between them, which we have modelled using the Mataga potential. The Matage potenial is parameterised by the two variables $J_{0}$ and $r_{\mathrm{0,j}}$. The model can also include the effects of uniform electric field, $\vec{F}$, by altering the energies of electron-hole basis elements by an amount $\Delta E= \vec{r}∙\vec{F}$.
+where $\vec{r}$ is the vector connecting the electron-hole pair, and the second term represents the electrostatic attraction between them, which we have modelled using the Mataga potential. The Mataga potenial is parameterised by the two variables $J_{0}$ and $r_{\mathrm{0,j}}$. The model can also include the effects of uniform electric field, $\vec{F}$, by altering the energies of electron-hole basis elements by an amount $\Delta E= \vec{r}∙\vec{F}$.
 
 These energies form the diagonal elements of the Hamiltonian. To simulate the disorder commonly found in the site energies of organic crystals, the model includes a Gaussian disorder term, which is added to the diagonal elements of the Hamiltonian. 
 
@@ -43,7 +43,7 @@ Putting these parts together, we can write the Hamiltonian describing the electr
 
 where basis states indexed with k are excitonic in character, while those indexed using i and j describe electron-hole pairs. The i index refers to the lattice site on which the electron is located and the j index to that on which the hole is localised. We then diagonalise this Hamiltonian to find the eigenstates and energy levels of the system.
 
-$^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another. 
+ <sub>$^{1}$ We note that this form of the dipole-dipole interaction is equivalent to assuming that the transition dipole moments of the basis states are all oriented parallel to one another.<sub> 
 
 ## Coupling to the Environment
 
