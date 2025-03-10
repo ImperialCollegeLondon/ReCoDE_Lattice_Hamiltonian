@@ -37,9 +37,9 @@ In addition to this coupling between excitonic states, it is also possible for t
 
 Putting these parts together, we can write the Hamiltonian describing the electronic states as
 
-```math
-\displaylines{\hat{H}= \sum_{k} E_{\mathrm{ex}}|k,k⟩⟨k,k| + \sum_{i \neq j}(E(|\vec{r}|)-q\vec{r}∙\vec{F})|i,j⟩⟨i,j| + \sum_{k \neq k'}d(|\vec{r}|)|k,k⟩⟨k',k'| \\ + \sum_{i \neq j, j'} t_{\mathrm{0,HOMO}}|i,j⟩⟨i,j'| + \sum_{i, i' \neq j}t_{\mathrm{0,LUMO}}|i,j⟩⟨i',j|}
-```
+$$
+\hat{H}= \sum_{k} E_{\mathrm{ex}}|k,k⟩⟨k,k| + \sum_{i \neq j}(E(|\vec{r}|)-q\vec{r}∙\vec{F})|i,j⟩⟨i,j| + \sum_{k \neq k'}d(|\vec{r}|)|k,k⟩⟨k',k'| + \sum_{i \neq j, j'} t_{\mathrm{0,HOMO}}|i,j⟩⟨i,j'| + \sum_{i, i' \neq j}t_{\mathrm{0,LUMO}}|i,j⟩⟨i',j|
+$$
 
 where basis states indexed with k are excitonic in character, while those indexed using i and j describe electron-hole pairs. The i index refers to the lattice site on which the electron is located and the j index to that on which the hole is localised. We then diagonalise this Hamiltonian to find the eigenstates and energy levels of the system.
 
