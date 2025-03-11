@@ -31,7 +31,9 @@ $\lambda_{\mathrm{x,ex}}^{\alpha}= \frac{\lambda_{\mathrm{x,ex}}}{\mathrm{IPR_{e
 where $x$ can be either $l$ or $h$. 
 
 # References
-1) Sumi, H. Theory on Rates of Excitation-Energy Transfer between Molecular Aggregates through Distributed Transition Dipoles with Application to the Antenna System in Bacterial Photosynthesis. J. Phys. Chem. B 103, 252–260 (1999).
-2) B. Taylor, N. & Kassal, I. Generalised Marcus theory for multi-molecular delocalised charge transfer. Chemical Science 9, 2942–2951 (2018).
-3) Azzouzi, M., Yan, J., Kirchartz, T. et al. Nonradiative Voltage Losses in Bulk-Heterojunction Organic Photovoltaics. Phys. Rev. X 8, 031055 (2018).
-4) [Chemistry LibreTexts](https://chem.libretexts.org/Courses/Pacific_Union_College/Quantum_Chemistry/13%3A_Molecular_Spectroscopy/13.07%3A_The_Franck-Condon_Principle). 
+
+1. Sumi, H. Theory on Rates of Excitation-Energy Transfer between Molecular Aggregates through Distributed Transition Dipoles with Application to the Antenna System in Bacterial Photosynthesis. J. Phys. Chem. B 103, 252–260 (1999).
+2. B. Taylor, N. & Kassal, I. Generalised Marcus theory for multi-molecular delocalised charge transfer. Chemical Science 9, 2942–2951 (2018).
+3. Azzouzi, M., Yan, J., Kirchartz, T. et al. Nonradiative Voltage Losses in Bulk-Heterojunction Organic Photovoltaics. Phys. Rev. X 8, 031055 (2018).
+4. [Chemistry LibreTexts](https://chem.libretexts.org/Courses/Pacific_Union_College/Quantum_Chemistry/13%3A_Molecular_Spectroscopy/13.07%3A_The_Franck-Condon_Principle).
+
