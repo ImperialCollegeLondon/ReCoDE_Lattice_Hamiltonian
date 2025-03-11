@@ -43,5 +43,6 @@ $C(\omega) = 2\pi \omega^2 \left( 1 + n(\omega)\right)\left(J(\omega) - J(-\omeg
 Note that, for each value of $k_{\alpha \beta}$, you must sum over all basis states. For a $N \times N$ square lattice, the total number of eigenstates is $\mathcal{O}(N^4)$ and so the number of rates which must be calculated is $\mathcal{O}(N^8)$. Consequaently, the calculation of the $k_{\alpha \beta}$ is typically the most time consuming step of the simulation. 
 
 # References
-1) Dynamics of Isolated and Open Quantum Systems in *Charge and Energy Transfer Dynamics in Molecular Systems* pg 67–190 (John Wiley & Sons, Ltd, 2011). doi:10.1002/9783527633791.ch3.
+
+1. Dynamics of Isolated and Open Quantum Systems in *Charge and Energy Transfer Dynamics in Molecular Systems* pg 67–190 (John Wiley & Sons, Ltd, 2011). doi:10.1002/9783527633791.ch3.
 
