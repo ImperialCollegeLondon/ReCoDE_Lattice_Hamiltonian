@@ -1,10 +1,11 @@
 # Introduction
 
 In this ReCoDe exemplar, we use quantum mechanics to describe the photoexcited states of a molecular crystal and explore how the properties of these states, such as their energies, vary as we alter different input parameters. To do this, we model the system using a tight-binding Hamiltonian, the eigenstates of which correspond to the system's photoexcited states. In the Hamiltonian, we account for the following interactions between the excited states:
-* The electrostatic interaction between spatially separated electrons and holes.
-* The electronic coupling between molecules which allows electons and holes to move from one lattice site to an adjacent lattice site.
-* The energetic stabilisation of electrons and holes which are located on the same lattice site (i.e., exciton formation).
-* The interaction between spatially separated excitonic states (i.e., energy transfer).
+
+- The electrostatic interaction between spatially separated electrons and holes.
+- The electronic coupling between molecules which allows electons and holes to move from one lattice site to an adjacent lattice site.
+- The energetic stabilisation of electrons and holes which are located on the same lattice site (i.e., exciton formation).
+- The interaction between spatially separated excitonic states (i.e., energy transfer).
 
 Below, we describe the construction of the Hamiltonian in greater detail and we explain how we include each of these interactions. 
 
