@@ -10,7 +10,7 @@ $FCWD(0)=\frac{1}{\sqrt{4\pi\lambda_{l}kT}} \sum_(w=0)^{\infty}\sum_{t=0}^{\inft
 
 for a transition from an excited state to the ground state. It is defined in terms of the energy of the excited state with respect to the ground state ($E$), the reorganization energy of thermally occupied low frequency phonon-modes coupled with the transition ($\lambda_{l}$), and the Huang-Rhys factor ($S$) of an effective high energy mode of energy $\hbar\Omega$ ($S = \lambda_{h}/\hbar\Omega$). These parameters are related to the properties of the system's spectral density function, which was described in the file [Introduction](01_ModelDescription.md), as follows: the total reorgansition energy of the spectral density function is the sum of $\lambda_{l}$and $\lambda_{h}$ and $\hbar\Omega$ is given by the value of the spectral density's e_peak parameter. 
 
-<img src="assets/Franck_Condon_Diagram.png" alt="Alt Text" style="width:30%; height:auto;">
+![FigSix](assets/Franck_Condon_Diagram.png)
 
 **Figure One:** Illustration of the Franck-Condon Principle. The $E_0$ ($E_1$) potential well represents the energy level of the ground (first excited) state as a function of the nuclear coordinate, $q_i$. The potential energy of the electronic state is modelled as having a quadratic depenence on $q_i$, giving rise to a series of vibronic modes for each electronic energy level. The number of phonons associated with a given vibronic mode is indicated by the quantum number $\nu$. The rate at which the first excited state decays to the ground state will depend upon the wavefunction overlap of the vibronic part of both wavefunctions. Picture credit: By Samoza, CC BY-SA 3.0, [Wikipedia](https://en.wikipedia.org/wiki/Franck%E2%80%93Condon_principle). 
 
