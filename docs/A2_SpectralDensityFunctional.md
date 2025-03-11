@@ -11,4 +11,5 @@ $\frac{\lambda}{\hbar} = \int_{0}^{\infty} d\omega \ \frac{J(\omega)}{\omega}$
 where $\lambda$ is the total input reorganisation energy of the basis states. 
 
 ## References 
-1) Renger, T. & Marcus, R. A. On the relation of protein dynamics and exciton relaxation in pigment–protein complexes: An estimation of the spectral density and a theory for the calculation of optical spectra. *The Journal of Chemical Physics* **116**, 9997–10019 (2002).
+
+1. Renger, T. & Marcus, R. A. On the relation of protein dynamics and exciton relaxation in pigment–protein complexes: An estimation of the spectral density and a theory for the calculation of optical spectra. *The Journal of Chemical Physics* **116**, 9997–10019 (2002).
