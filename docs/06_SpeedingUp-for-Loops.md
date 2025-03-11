@@ -47,4 +47,4 @@ In order to use our generator, we need to make it so that each element of the ra
 
 By combining these steps of vectorization and using generators, we achieved a significant speed up in the time taken to claculate the rate matrix, as we show in the plot below (the code used to generate this plot can be found in [Appendix Three](https://github.com/ImperialCollegeLondon/ReCoDE_Lattice_Hamiltonian/blob/39-write-speeding-up-for-loops-documentation-v2/notebooks/A3_SpeedingUp-for-Loops-ExampleCode.ipynb)). Both the lines run (roughly) parallel to one another, which shows us that they scale in approximately the same way as lattice size increases. For all lattice sizes represented, the vectorized version is 3-4 times faster, which is a worthwhile speed-up.
 
-<img src="assets/SpeedingUp-for-LoopsExample.png" alt="Alt Text" style="width:50%; height:auto;">
+![FigThree](assets/SpeedingUp-for-LoopsExample.png)
