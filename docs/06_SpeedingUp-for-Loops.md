@@ -1,9 +1,11 @@
 # Speeding up ```for``` loops: the ```get_rate_mat``` function
 
 The purpose of the ```get_rate_mat``` function in ```lattice.py``` is to calculate the elements of the rate matrix which describes the rate of population transfer between the excited states of the lattice. Each element of the rate matrix takes the form 
-```math
-k_{\alpha \beta}(\omega_{\alpha \beta}) = \left[ \sum_{k}|c_{kk}^{(\alpha)}|^{2}|c_{kk}^{(\beta)}|^{2} + \sum_{i\neq j}|c_{ij}^{(\alpha)}|^{2}|c_{ij}^{(\beta)}|^{2} + \sum_{j\neq i}|c_{ij}^{(\alpha)}|^{2}|c_{ij}^{(\beta)}|^{2} \right] C(\omega_{\alpha \beta})
-```
+
+$$
+k_{\alpha \beta}(\omega_{\alpha \beta}) = \left( \sum_{k}|c_{kk}^{(\alpha)}|^{2}|c_{kk}^{(\beta)}|^{2} + \sum_{i\neq j}|c_{ij}^{(\alpha)}|^{2}|c_{ij}^{(\beta)}|^{2} + \sum_{j\neq i}|c_{ij}^{(\alpha)}|^{2}|c_{ij}^{(\beta)}|^{2} \right) C(\omega_{\alpha \beta})
+$$
+
 as is described in greater detail [here](02_FindingSteadyStatePopulations.md). Looking at this summation, we see that each term in the rate matrix requires a summation over all the basis states of the system (basis states are indexed using the latin alphabet, and eigenstates using the greek alphabet). For a $N\times N$ lattice, the number of basis states is $N^{4}$. In addition to this, the rate matrix itself contains $N^{2}$ elements as we calculate rates between every possible pair of eigenstates. Thus, the calculation of the rate matrix scales as $N^{8}$ meaning that it limits the speed of the code for all but the smallest lattice sizes. This means that we need this function to run as quickly as possible in order to minimise the overall runtime of the code and, in this file, we will explore some of the techniques we have used to achieve this. 
 
 ## 1) Vectorize functions
