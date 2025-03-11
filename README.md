@@ -4,7 +4,7 @@
 
 In this project, we use a simplified model of an organic crystal to calculate the system's excited states under illumination and their populations. We then investigate how changing the input parameters of the model changes the nature of the excited states. An example is shown in the GIF below where we demonstrate how applying an electric field changes the energies and populations of the eigenstates. 
 
-![GifOne](https://github.com/ImperialCollegeLondon/ReCoDE_Lattice_Hamiltonian/blob/main/docs/assets/ReCoDe.gif)
+![GifOne](docs/assets/ReCoDe.gif)
 
 ## Learning Outcomes
 
